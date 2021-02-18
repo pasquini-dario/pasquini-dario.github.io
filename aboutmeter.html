@@ -45,10 +45,10 @@
 
                   <div class="grid-row">
                       <div class="grid-column span-whole mt1 reveal-on-scroll is-revealing">
-                        <p>This is an implementation of the <b>Interpretable Probabilistic password meter</b> we proposed <a href="https://arxiv.org/abs/2004.07179">here</a>. Our work has been and accepted and presented at <a href="https://link.springer.com/chapter/10.1007/978-3-030-58951-6_25"><b>ESORICS-2020</b></a>.</p>
-                        <br>
-                        <h3>How it works:</h3>
-                        <p>The meter relies on a <b>Deep Convolution Neural Network</b> to model the probability of a password and the characters that compose it. This is achieved by training the neural net on a massive collection of weak passwords that have been obtained from public password breaches. The network is trained in a kind of "masked language modeling" in a similar way to <a href="https://en.wikipedia.org/wiki/BERT_(language_model)">BERT</a> (but on passwords).</p>
+                          <p>This is an implementation of the <b>Interpretable Probabilistic password meter</b> we proposed <a href="https://arxiv.org/abs/2004.07179">here</a>. Our work has been accepted and presented at <a href="https://link.springer.com/chapter/10.1007/978-3-030-58951-6_25"><b>ESORICS-2020</b></a>.</p>
+                          <br>
+                          <h3>How it works:</h3>
+                          <p>The meter relies on a <b>Deep Convolution Neural Network</b> to model the probability of a password and the characters that compose it. This is achieved by training the neural net on a massive collection of weak passwords that have been obtained from public password breaches. The network is trained in a kind of "masked language modeling" in a similar way to <a href="https://en.wikipedia.org/wiki/BERT_(language_model)">BERT</a> (but on passwords).</p>
 
                           <p>Here, we use the trained network to detect insecure composition patterns in your password and make them explicit to you via a color-based feedback mechanism. <b>The colors encode the probability assigned to each character from the neural net</b>; that is, <i>"the probability of observing that specific character knowing the values of all the other characters in the password"</i>. Check the <a href="https://arxiv.org/abs/2004.07179">paper</a> for more details.</p>
                           <br>
@@ -134,7 +134,6 @@
 
                 <!-- CTA -->
                 <section class="align--center pt3 pb3">
-                    <p class="h3 mb2 reveal-on-scroll is-revealing">More information:</p>
                     <a href="index.html" class="btn btn--default reveal-on-scroll is-revealing">The Meter</a>
                     <a href="aboutus.html" class="btn btn--outline  reveal-on-scroll is-revealing">About Us</a>
                 </section>
