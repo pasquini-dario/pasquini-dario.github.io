@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <!-- Import TensorFlow.js -->
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@2.0.0/dist/tf.min.js"></script>
+
+  <script src="rainbowvis.js"></script>
+
+  <script src="charmap.js"></script>
+  <script src="feedback.js"></script>
+  <script src="constant.js"></script>
+
+  <!-- Meta -->
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <title>DeepPasswd</title>
+  <meta name="description" content="">
+
+  <!-- The compiled CSS file -->
+  <link rel="stylesheet" href="css/production.css">
+
+  <!-- Web fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Space+Mono:400,700" rel="stylesheet">
+
+  <!-- favicon.ico. Place these in the root directory. -->
+  <link rel="shortcut icon" href="favicon.png">
+
+</head>
+
+  <body class="has-animations">
+
+
+    <!-- Create outer border -->
+    <div class="page-border">
+    <div class="bg--white">
+
+        <!-- Header -->
+        <header class="align--center pt3 pb2">
+            <div class="container">
+               <h1 class="mb3 reveal-on-scroll is-revealing">Deep<font color="#e37474">Passwd</font>;</h1><!-- <img src="/img/logo.svg" alt="Huddle"></h1> -->
+               <h3 id="subh3" class="mb3 reveal-on-scroll is-revealing"> Improve your <font color="#e37474">password</font> with a Neural Network!</h3>
+            </div>
+        </header>
+        <!-- Body -->
+        <main>
+
+          <div class="container">
+
+            <!--
+              <section class="pt2 pb3">
+                  <div class="grid-row">
+                      <div class="grid-column span-whole mt1 reveal-on-scroll is-revealing">
+                          <p> <b>How it works:</b> Colors define the secuirty of each character. <font color="red">Red</font> means <font color="red">insicure</font> </p>
+                      </div>
+                  </div>
+                -->
+
+              </section>
+
+
+
+              <div id='corediv'>
+                <canvas id="canvaspp">
+                  Your browser does not support the canvas element.
+                </canvas>
+                <br>
+                <input type="text" id="passwd_score" readonly>
+                <br>
+                <div class="icon">
+                  <div class="arrow"></div>
+                  <input type="text" placeholder="type a password here" id="passwd" onChange="runInference()" maxlength="15 ">
+                </div>
+            </div>
+                <!-- Info -->
+                <section class="pt2 pb3">
+                    <div class="grid-row">
+                        <div class="grid-column span-one-third mt1 reveal-on-scroll is-revealing" id="leftin">
+                            <p>🤖 <b>This AI studied millions of passwords</b> and understood what makes them weak.</p>
+                        </div>
+                        <div class="grid-column span-one-third mt1 reveal-on-scroll is-revealing">
+                            <p id="instruct">🔧 <b>Tweak your password by following the AI's guidance:</b>
+                              <br>
+                              <br>
+                              <b> ><font color="red">Red</font></b> characters are insecure. <b>Change them!!!</b>
+                              <br>
+                              👆points to the most insicure character of your password.
+                              <br>
+                              <br>
+                              <b> ><font color="green">Green</font></b> characters are secure, instead. You can keep them.
+                            </p>
+                        </div>
+                        <div class="grid-column span-one-third mt1 reveal-on-scroll is-revealing" id="rightin">
+                            <p> 🔒 <b>Everything is happening in <a href="https://www.tensorflow.org/js">your browser!</a></b> Your passwords won’t leave your computer. <b>But chek for shoulder surfers!</b> 🏄‍♂️</p>
+                        </div>
+                    </div>
+
+                </section>
+
+
+                <!-- Testimonials
+                <section class="pt2 pb3">
+                    <h3 class="align--center mb2">🎓 Publications:</h3>
+                    <div class="grid-row">
+                        <div class="grid-column span-half mt1">
+                            <blockquote class="blockquote">
+                                <p>Interpretable Probabilistic Password Strength Meters via Deep Learning.</p>
+                                <p>> <cite>ESORCIS2020</cite></p>
+                            </blockquote>
+                        </div>
+                        <div class="grid-column span-half mt1">
+                            <blockquote class="blockquote">
+                                <p>Improving Password Guessing via Representation Learning.</p>
+                                <p>> <cite>S&#38;P2021</cite></p>
+                            </blockquote>
+                        </div>
+                    </div>
+                </section>
+                -->
+
+                <!-- CTA -->
+                <section class="align--center pt3 pb3">
+                    <p class="h3 mb2 reveal-on-scroll is-revealing">More information:</p>
+                    <a href="aboutmeter.html" class="btn btn--outline reveal-on-scroll is-revealing">About the Meter</a>
+                    <a href="aboutus.html" class="btn btn--outline  reveal-on-scroll is-revealing">About Us</a>
+                </section>
+
+            </div>
+        </main>
+
+    </div>
+    </div>
+
+    <!-- Scroll reveal -->
+    <script src="https://unpkg.com/scrollreveal@4.0.0/dist/scrollreveal.min.js"></script>
+
+    <!-- The compiled JavaScript file -->
+    <script src="js/production.js"></script>
+
+
+  <script type="text/javascript">
+
+/*
+  function canvas_arrow(context, fromx, fromy, tox, toy, radius) {
+    //context.clearRect(0, w, canvas.width, canvas.height);
+
+  	var x_center = tox;
+  	var y_center = toy;
+
+  	var angle;
+  	var x;
+  	var y;
+
+    const ww = 11;
+    context.fillRect(fromx-ww/2, CWW+h+20, ww, ww);
+
+  	context.beginPath();
+
+  	angle = Math.atan2(toy - fromy, tox - fromx)
+  	x = radius * Math.cos(angle) + x_center;
+  	y = radius * Math.sin(angle) + y_center;
+
+  	context.moveTo(x, y);
+
+  	angle += (1.0/3.0) * (2 * Math.PI)
+  	x = radius * Math.cos(angle) + x_center;
+  	y = radius * Math.sin(angle) + y_center;
+
+  	context.lineTo(x, y);
+
+  	angle += (1.0/3.0) * (2 * Math.PI)
+  	x = radius *Math.cos(angle) + x_center;
+  	y = radius *Math.sin(angle) + y_center;
+
+  	context.lineTo(x, y);
+
+  	context.closePath();
+
+  	context.fill();
+  }
+*/
+function canvas_arrow(context, x, y) {
+  //context.clearRect(0, w, canvas.width, canvas.height);
+  context.font = "40px Verdana";
+  context.fillStyle = "black";
+  context.fillText("👆", x+10, y+37);
+}
+
+    function plot_clean(){
+      // clean password viz
+      var canvas = document.getElementById("canvaspp");
+      var ctx = canvas.getContext("2d");
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      document.getElementById("passwd_score").value = "";
+    }
+
+    function get_color(g){
+      // compute color letter
+      var ci = g / CICAP;
+      if(ci > 1.)
+        ci = 1.;
+      ci = 1. - ci;
+      return ci;
+    }
+
+    function plot_score(G){
+      // plot final score password
+      const Gexp = Math.floor( Math.log10(G) );
+      console.log(Gexp);
+
+      for(var i = 0; i < g_msg.length; i++){
+        const l = document.getElementById("passwd_score");
+        if(Gexp <= g_msg[i][0]){
+          l.value = g_msg[i][1];
+          //l.style.color = avg_ci;
+          break;
+        }
+      }
+    }
+
+    function plot_lcp(lcp, p){
+      // plot password viz
+      var canvas = document.getElementById("canvaspp");
+      var ctx = canvas.getContext("2d");
+
+      const in_p = document.getElementById("instruct");
+      in_p.style.opacity = 1;
+
+      const r_p = document.getElementById("rightin");
+      r_p.style.opacity = .2;
+
+      const l_p = document.getElementById("leftin");
+      l_p.style.opacity = .2;
+
+
+
+      sci = get_sc(lcp);
+
+      //const startx =  ( (BN - lcp.length) / 2 ) * CWW;
+      const startx = 0;
+
+      plot_clean();
+
+      var rainbow = new Rainbow();
+      rainbow.setSpectrum('green', "white", 'red');
+      rainbow.setNumberRange(0.0, 1.0);
+
+      canvas.setAttribute('width', lcp.length * CWW);
+      //canvas.setAttribute('height', 500);
+
+      ctx.font = "40px Space Mono";
+
+      for(var i = 0; i < lcp.length; i++){
+        const ci = get_color(lcp[i][2]);
+
+        ctx.fillStyle = '#' + rainbow.colourAt(ci);
+        ctx.fillRect((CWW*i)+startx, h, CWW, CWW);
+
+        ctx.fillStyle = "black";
+        ctx.fillText(lcp[i][0], (CWW*i+CWW/3)+startx, CWW/1.4 + h);
+
+        console.log(lcp[i]);
+      }
+
+      //const q = 15;
+      //canvas_arrow(ctx, startx + (CWW*sci+CWW/1.8), 100+q+h, startx + (CWW*sci+CWW/1.8), CWW+q+h, q);
+      canvas_arrow(ctx, startx + (CWW*sci), CWW+h);
+
+
+      /*
+      canvas.addEventListener('mousemove', e => {
+        ctx.clearRect(0, 0, canvas.width, h);
+
+        const i = Math.round( (e.offsetX - startx) / CWW);
+        console.log(e.offsetX);
+
+        const ci = get_color(lcp[i][2]);
+        ctx.fillStyle = '#' + rainbow.colourAt(ci);
+
+        ctx.fillRect(startx+(CWW*i-CWW), 0, (3*CWW), CWW);
+
+        const hints = ["a", "b", "c"];
+        const pos = [-1, 0, 1];
+
+        //ctx.font = "10px Space Mono";
+        for(var j = 0; j < lcp.length; j++){
+          ctx.fillStyle = "black";
+          ctx.fillText(`${hints[j]}`, startx + CWW*i+CWW/3 + pos[j]*CWW, CWW/1.4);
+        }
+        //console.log(lcp[i][0]);
+        });
+        */
+
+    }
+  </script>
+
+  <script type="text/javascript">
+
+    async function loadModel() {
+      // load the model
+      const model = await tf.loadLayersModel(model_path);
+      return model;
+    }
+    const MODEL = loadModel();
+
+
+      var canvas = document.getElementById("myCanvas");
+
+      async function runInference() {
+        const model = await MODEL;
+
+        const raw_psswd = document.getElementById("passwd").value
+        if(raw_psswd.length == 0){
+          plot_clean();
+          return;
+        }
+        //console.log(raw_psswd);
+        xids = makeHoles(raw_psswd);
+
+        var x = tf.tensor2d(xids);
+        //x.print();
+
+        const pp = model.predict(x);
+        console.log(pp.shape);
+        const p = await pp.array();
+        const out = get_local_conditional_probabilities(raw_psswd, p);
+        const lcp = out[0];
+        const G = out[1];
+
+        plot_lcp(lcp, p);
+        plot_score(G);
+      }
+
+      const BN = max_len + 2;
+      var canvas = document.getElementById("canvaspp");
+      canvas.setAttribute('width', CWW * (BN));
+      canvas.setAttribute('height', H);
+
+      runInference();
+
+
+
+const $icon = document.querySelector('.icon');
+const $arrow = document.querySelector('.arrow');
+
+$icon.onclick = () => {
+  $arrow.animate([
+    {left: '0'},
+    {left: '10px'},
+    {left: '0'}
+  ],{
+    duration: 700,
+    iterations: Infinity
+  });
+}
+  </script>
+
+  </body>
+
+</html>

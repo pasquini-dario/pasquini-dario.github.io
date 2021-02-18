@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <!-- Import TensorFlow.js -->
+
+  <!-- Meta -->
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <title>DeepPasswd</title>
+  <meta name="description" content="">
+
+  <!-- The compiled CSS file -->
+  <link rel="stylesheet" href="css/production.css">
+
+  <!-- Web fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Space+Mono:400,700" rel="stylesheet">
+
+  <!-- favicon.ico. Place these in the root directory. -->
+  <link rel="shortcut icon" href="favicon.ico">
+
+</head>
+
+  <body class="has-animations">
+
+
+    <!-- Create outer border -->
+    <div class="page-border">
+    <div class="bg--white">
+
+        <!-- Header -->
+        <header class="align--center pt3 pb2">
+            <div class="container">
+               <h1 class="mb3 reveal-on-scroll is-revealing">Deep<font color="#e37474">Passwd</font>;</h1><!-- <img src="/img/logo.svg" alt="Huddle"></h1> -->
+               <h3 id="subh3" class="mb3 reveal-on-scroll is-revealing"> Interpretable Password Strength Meters via Deep Learning.</h3>
+            </div>
+        </header>
+        <!-- Body -->
+        <main>
+
+          <div class="container">
+
+
+                  <div class="grid-row">
+                      <div class="grid-column span-whole mt1 reveal-on-scroll is-revealing">
+                          <p>This is an implementation of the <b>Interpretable Probabilistic password meter</b> we proposed <a href="https://arxiv.org/abs/2004.07179">here</a>. Our work has been accepted and presented at <a href="https://link.springer.com/chapter/10.1007/978-3-030-58951-6_25"><b>ESORICS-2020</b></a>.</p>
+                          <br>
+                          <h3>How it works:</h3>
+                          <p>The meter relies on a <b>Deep Convolution Neural Network</b> to model the probability of a password and the characters that compose it. This is achieved by training the neural net on a massive collection of weak passwords that have been obtained from public password breaches. The network is trained in a kind of "masked language modeling" in a similar way to <a href="https://en.wikipedia.org/wiki/BERT_(language_model)">BERT</a> (but on passwords).</p>
+
+                          <p>Here, we use the trained network to detect insecure composition patterns in your password and make them explicit to you via a color-based feedback mechanism. <b>The colors encode the probability assigned to each character from the neural net</b>; that is, <i>"the probability of observing that specific character knowing the values of all the other characters in the password"</i>. Check the <a href="https://arxiv.org/abs/2004.07179">paper</a> for more details.</p>
+                          <br>
+                          <h3>How to use it:</h3>
+                          <p> <font color="red"> The red characters are the insecure ones</font> and indicate the components of your password that are making it easy to guess for an attacker. By modifying the red characters, you will improve your password with a very limited number of changes. </p>
+                          <p><font color="green"> The green characters, instead, are very hard to guess for an attacker</font> and can remain unchanged. </p>
+                      </div>
+                </div>
+
+
+
+                <!--
+                <section class="pt3 pb3 align--center">
+                    <h3 class="mb1">Publications:</h3>
+                    <div class="grid-row">
+                        <div class="grid-column span-2 mt2">
+                            <img class="mb1" src="/img/woman1.jpg" alt="Alyssa Long">
+                            <p class="small">Alyssa Long</p>
+                        </div>
+
+                        <div class="grid-column span-2 mt2">
+                            <img class="mb1" src="/img/man1.jpg" alt="Jonathan Foster">
+                            <p class="small">Jonathan Foster</p>
+                        </div>
+                        <div class="grid-column span-2 mt2">
+                            <img class="mb1" src="/img/woman2.jpg" alt="Kiara Taylor">
+                            <p class="small">Kiara Taylor</p>
+                        </div>
+                        <div class="grid-column span-2 mt2">
+                            <img class="mb1" src="/img/man2.jpg" alt="Elijah Rhodes">
+                            <p class="small">Elijah Rhodes</p>
+                        </div>
+                        <div class="grid-column span-2 mt2">
+                            <img class="mb1" src="/img/woman3.jpg" alt="Anita Gonzalez">
+                            <p class="small">Anita Gonzalez</p>
+                        </div>
+                        <div class="grid-column span-2 mt2">
+                            <img class="mb1" src="/img/man3.jpg" alt="Adrian Sosa">
+                            <p class="small">Adrian Sosa</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!--
+                <section class="pt3 pb3 align--center">
+                    <h3 class="mb2">Some generous peeps</h3>
+                    <img class="m1" src="/img/stripe.svg" alt="Stripe" style="height:50px">
+                    <img class="m1" src="/img/segment.svg" alt="Segment" style="height:45px">
+                    <img class="m1" src="/img/newrelic.svg" alt="New Relic" style="height:35px">
+                    <img class="m1" src="/img/drift.svg" alt="Drift" style="height:50px">
+                    <img class="m1" src="/img/zopim.svg" alt="Zopim" style="height:50px">
+                </section>
+
+                -->
+
+
+                <!-- Testimonials -->
+                <br>
+                <br>
+                <section class="pt2 pb3">
+                    <h3 class="align--center mb2">🎓 Related Publications:</h3>
+                    <div class="grid-row">
+                        <div class="grid-column span-one-third mt1">
+                            <blockquote class="blockquote">
+                                <p><a href="https://arxiv.org/abs/2004.07179">Interpretable Probabilistic Password Strength Meters via Deep Learning.</a></p>
+                                <p> <cite>ESORCIS2020</cite></p>
+                            </blockquote>
+                        </div>
+                        <div class="grid-column span-one-third mt1">
+                            <blockquote class="blockquote">
+                                <p><a href="https://arxiv.org/abs/1910.04232">Improving Password Guessing via Representation Learning.</a></p>
+                                <p> <cite>S&#38;P2021</cite></p>
+                            </blockquote>
+                        </div>
+                        <div class="grid-column span-one-third mt1">
+                            <blockquote class="blockquote">
+                              <p><a href="https://arxiv.org/abs/2010.12269">Reducing Bias in Modeling Real-world Password Strength via Deep Learning and Dynamic Dictionaries.</a></p>
+                              <p> <cite>USENIX2021</cite></p>
+                            </blockquote>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- CTA -->
+                <section class="align--center pt3 pb3">
+                    <a href="index.html" class="btn btn--default reveal-on-scroll is-revealing">The Meter</a>
+                    <a href="aboutus.html" class="btn btn--outline  reveal-on-scroll is-revealing">About Us</a>
+                </section>
+
+            </div>
+        </main>
+
+        <!-- Footer
+        <footer class="mt2 pb3 align--center">
+            <ul class="no-bullets list--inline mb0">
+                <li class="m1 block-on-mobile"><a href="https://www.twitter.com" class="link"><img class="icon" src="/img/twitter.svg" alt="Twitter"> Twitter</a></li>
+                <li class="m1 block-on-mobile"><a href="https://www.facebook.com" class="link"><img class="icon" src="/img/facebook.svg" alt="Facebook"> Facebook</a></li>
+                <li class="m1 block-on-mobile"><a href="https://www.instagram.com" class="link"><img class="icon" src="/img/instagram.svg" alt="Instagram"> Instagram</a></li>
+                <li class="m1 block-on-mobile"><a href="https://www.youtube.com" class="link"><img class="icon" src="/img/youtube.svg" alt="YouTube"> YouTube</a></li>
+            </ul>
+            <p class="mt1 small text--gray">Design by <a href="https://www.papayatemplates.com" class="link">Papaya</a>.</p>
+        </footer>
+        -->
+    </div>
+    </div>
+
+    <!-- Scroll reveal -->
+    <script src="https://unpkg.com/scrollreveal@4.0.0/dist/scrollreveal.min.js"></script>
+
+    <!-- The compiled JavaScript file -->
+    <script src="js/production.js"></script>
+
+  </body>
+
+</html>
