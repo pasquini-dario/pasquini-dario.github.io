@@ -1,4 +1,4 @@
-const model_path = 'http://127.0.0.1:8000/N_SMALL/model.json'
+const model_path = 'N_SMALL/model.json'
 const CWW = 50;
 const h = 0;
 const CICAP = 40;
