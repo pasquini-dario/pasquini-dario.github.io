@@ -48,13 +48,13 @@
                           <p>This is an implementation of the <b>Interpretable Probabilistic password meter</b> we proposed <a href="https://arxiv.org/abs/2004.07179">here</a>. Our work has been accepted and presented at <a href="https://link.springer.com/chapter/10.1007/978-3-030-58951-6_25"><b>ESORICS-2020</b></a>.</p>
                           <br>
                           <h3>How it works:</h3>
-                          <p>The meter relies on a <b>Deep Convolution Neural Network</b> to model the probability of a password and the characters that compose it. This is achieved by training the neural net on a massive collection of weak passwords that have been obtained from public password breaches. The network is trained in a kind of "masked language modeling" in a similar way to <a href="https://en.wikipedia.org/wiki/BERT_(language_model)">BERT</a> (but on passwords).</p>
+                          <p>The meter relies on a <b>Deep Convolution Neural Network</b> to model the probability of a password and the characters that compose it. This is achieved by training the neural net on a massive collection of weak passwords that have been obtained from public password breaches. The network is trained in a kind of "masked language modeling" similar to <a href="https://en.wikipedia.org/wiki/BERT_(language_model)">BERT</a> (but on passwords).</p>
 
-                          <p>Here, we use the trained network to detect insecure composition patterns in your password and make them explicit to you via a color-based feedback mechanism. <b>The colors encode the probability assigned to each character from the neural net</b>; that is, <i>"the probability of observing that specific character knowing the values of all the other characters in the password"</i>. Check the <a href="https://arxiv.org/abs/2004.07179">paper</a> for more details.</p>
+                          <p>Here, we use the trained network to detect insecure composition patterns in your password and make them explicit via a color-based feedback mechanism. <b>The colors encode the probability assigned to each character from the neural net</b>; that is, <i>"the probability of observing that specific character knowing the values of all the other characters in the password"</i>. Check the <a href="https://arxiv.org/abs/2004.07179">paper</a> for more details.</p>
                           <br>
                           <h3>How to use it:</h3>
-                          <p> <font color="red"> The red characters are the insecure ones</font> and indicate the components of your password that are making it easy to guess for an attacker. By modifying the red characters, you will improve your password with a very limited number of changes. </p>
-                          <p><font color="green"> The green characters, instead, are very hard to guess for an attacker</font> and can remain unchanged. </p>
+                          <p><font color="red"> The red characters are the insecure ones</font> and indicate your password components that make the attacker's job easier. By modifying them, you will improve your password with a minimal number of changes.
+                          <font color="green"> The green characters, instead, are very hard to guess</font> for an attacker and can be kept unchanged.</p>
                       </div>
                 </div>
 
@@ -109,24 +109,24 @@
                 <br>
                 <br>
                 <section class="pt2 pb3">
-                    <h3 class="align--center mb2">🎓 Related Publications:</h3>
+                    <h3 class="align--center mb2">🎓Related Publications:</h3>
                     <div class="grid-row">
                         <div class="grid-column span-one-third mt1">
                             <blockquote class="blockquote">
                                 <p><a href="https://arxiv.org/abs/2004.07179">Interpretable Probabilistic Password Strength Meters via Deep Learning.</a></p>
-                                <p> <cite>ESORCIS2020</cite></p>
+                                <p> <cite>ESORCIS 2020</cite></p>
                             </blockquote>
                         </div>
                         <div class="grid-column span-one-third mt1">
                             <blockquote class="blockquote">
                                 <p><a href="https://arxiv.org/abs/1910.04232">Improving Password Guessing via Representation Learning.</a></p>
-                                <p> <cite>S&#38;P2021</cite></p>
+                                <p> <cite>S&#38;P 2021</cite></p>
                             </blockquote>
                         </div>
                         <div class="grid-column span-one-third mt1">
                             <blockquote class="blockquote">
                               <p><a href="https://arxiv.org/abs/2010.12269">Reducing Bias in Modeling Real-world Password Strength via Deep Learning and Dynamic Dictionaries.</a></p>
-                              <p> <cite>USENIX2021</cite></p>
+                              <p> <cite>USENIX Sec 2021</cite></p>
                             </blockquote>
                         </div>
                     </div>
