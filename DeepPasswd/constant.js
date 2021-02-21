@@ -1,5 +1,6 @@
 const model_path = 'N_SMALL/model.json'
-const CWW = 50;
+var CWW = 50;
+var FONT = 40;
 const h = 0;
 const CICAP = 40;
 const max_len = 16;
