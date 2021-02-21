@@ -1,10 +1,10 @@
 const model_path = 'N_SMALL/model.json'
 var CWW = 50;
 var FONT = 40;
+var H = 100;
 const h = 0;
 const CICAP = 40;
 const max_len = 16;
-const H = 100;
 
 const g_msg = [
   [5, "☠️ Totally insecure!"],

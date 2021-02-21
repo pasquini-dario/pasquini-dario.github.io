@@ -365,11 +365,15 @@ $icon.onclick = () => {
       if(window.innerWidth > 1000){
         CWW = 50;
         FONT = 40;
+        H = 100;
       }else{
         CWW = 25;
         FONT = 20;
+        H = 50;
       }
-      console.log(window.innerWidth);
+      var canvas = document.getElementById("canvaspp");
+      canvas.setAttribute('height', H);
+      //console.log(window.innerWidth);
     }
 
     window.onresize = reportWindowSize;
