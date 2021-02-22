@@ -3250,3 +3250,9 @@ li{
 	margin-right: auto;
 	width: 9em;
 }
+
+
+#side_b{
+	position: absolute;
+  bottom: 100px;
+}
