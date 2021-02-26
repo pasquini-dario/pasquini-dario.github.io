@@ -9,10 +9,10 @@ const max_len = 16;
 const g_msg = [
   [5, "☠️ Totally insecure!"],
   [8, "⚠️ Quite insecure!"],
-  [10, "🤔 Ok, but you can do better"],
-  [13, "🤩 good password"],
-  [15, "🔒 That's secure!"],
-  [30, "🤖 Whow! Is a Machine generated password!?"]
+  [10, "🤔 Ummmmm, you can do better"],
+  [14, "😀 good password"],
+  [16, "🔒 That's secure!"],
+  [30, "🤖 Whow! Is this a Machine generated password!?"]
 ]
 
 const CM = {
