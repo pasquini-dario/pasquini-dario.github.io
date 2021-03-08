@@ -10,7 +10,7 @@ const g_msg = [
   [5, "☠️ Totally insecure!"],
   [8, "⚠️ Quite insecure!"],
   [10, "🤔 Ummmmm, you can do better"],
-  [14, "😀 good password"],
+  [14, "😀 Good password"],
   [16, "🔒 That's secure!"],
   [30, "🤖 Whow! Is this a Machine generated password!?"]
 ]
