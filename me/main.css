@@ -3229,9 +3229,9 @@ input, select, textarea {
 }
 
 #bib{
-	list-style-type: square;
-	margin-bottom: .6em;
-	list-style-position: inside;
+	list-style-type: none;
+	margin-bottom: 2em;
+	list-style-position: outside;
 }
 
 li{
@@ -3255,4 +3255,9 @@ li{
 #side_b{
 	position: absolute;
   bottom: 100px;
+}
+
+
+ul {
+  list-style-position: outside;
 }
