@@ -3230,7 +3230,7 @@ input, select, textarea {
 
 #bib{
 	list-style-type: none;
-	margin-bottom: 2em;
+	margin-bottom: .6em;
 	list-style-position: outside;
 }
 
