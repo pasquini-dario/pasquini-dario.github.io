@@ -98,7 +98,7 @@ input, select, textarea {
 		}
 
 	body, input, select, textarea {
-		color: #a2a2a2;
+		color: #7d857f;
 		font-family: "Source Sans Pro", Helvetica, sans-serif;
 		font-size: 13pt;
 		font-weight: 400;
@@ -122,7 +122,7 @@ input, select, textarea {
 		}
 
 	strong, b {
-		color: #787878;
+		color: #393d3a;
 		font-weight: 400;
 	}
 
@@ -130,15 +130,20 @@ input, select, textarea {
 		font-style: italic;
 	}
 
+	#lighter{
+		font-style: italic;
+		color: #bdc9c1;
+	}
+
 	p {
 		margin: 0 0 2em 0;
 	}
 
 	h1, h2, h3, h4, h5, h6 {
-		color: #262626;
 		font-weight: 400;
 		line-height: 1em;
-		margin: 0 0 1em 0;
+		margin: 0 0 .3em 0;
+		color: #393d3a;
 	}
 
 		h1 a, h2 a, h3 a, h4 a, h5 a, h6 a {
@@ -3234,11 +3239,25 @@ input, select, textarea {
 	list-style-position: outside;
 }
 
+
+#multiple{
+	margin-bottom: .0em;
+	margin-left: 1em;
+}
+
+#workingon{
+	margin-left: 1em;
+}
+
+
 li{
-	margin-bottom: .1em;
+	margin-bottom: .3em;
 	margin-left: .5em;
 }
 
+#mainpub{
+	margin-bottom: .6em;
+}
 #myname{
 	padding-left: 0em;
 	font-size: 1.5em;
