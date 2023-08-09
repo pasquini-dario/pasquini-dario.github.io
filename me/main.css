@@ -122,7 +122,7 @@ input, select, textarea {
 		}
 
 	strong, b {
-		color: #1f1e1d;
+		color: #393d3a;
 		font-weight: 400;
 	}
 
@@ -3256,7 +3256,7 @@ li{
 }
 
 #mainpub{
-	margin-bottom: .8em;
+	margin-bottom: .7em;
 }
 #myname{
 	padding-left: 0em;
