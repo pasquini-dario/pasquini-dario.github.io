@@ -122,7 +122,7 @@ input, select, textarea {
 		}
 
 	strong, b {
-		color: #393d3a;
+		color: #1f1e1d;
 		font-weight: 400;
 	}
 
@@ -3256,7 +3256,7 @@ li{
 }
 
 #mainpub{
-	margin-bottom: .6em;
+	margin-bottom: .8em;
 }
 #myname{
 	padding-left: 0em;
@@ -3283,4 +3283,8 @@ ul {
 
 #slides {
 	color: grey;
+}
+
+#high{
+	color: #49bf9d;
 }
