@@ -19,6 +19,9 @@
 \usepackage{hyperref,url}
 \usepackage[utf8]{inputenc}
 \usepackage{graphicx}
+\usepackage{fontawesome}
+
+\usepackage{amssymb}
 
 \usepackage{hyperref}
 \hypersetup{
@@ -54,7 +57,7 @@
 %----------------------------------------------------------------------------------------
 %	NAME AND ADDRESS SECTION
 %----------------------------------------------------------------------------------------
-%\moveleft-1.5\hoffset\centerline{\includegraphics[scale=0.035]{me/me}}
+%\moveleft-1.5\hoffset\centerline{\includegraphics[scale=0.2]{me/me}}
 \moveleft.5\hoffset\centerline{\large\bf Dario Pasquini, Ph.D.} % Your name at the top
 %\moveleft.5\hoffset\centerline{19/09/1991, Rome, Italy.} % Your name at the top
 %\moveleft.5\hoffset\centerline{pasquini.dario.1991@gmail.com} 
@@ -66,10 +69,11 @@
  %\moveleft.5\hoffset\centerline{\textbf{GitHub:} \url{https://github.com/pasquini-dario/}}
  \vspace{.4cm}
  \moveleft.5\hoffset\centerline{
- \href{mailto:pasquini.dario.1991@gmail.com}{Contact} \qquad
  \href{https://pasquini-dario.github.io/me/}{Personal Page} \qquad
 \href{https://github.com/pasquini-dario/}{GitHub} \qquad
   \href{https://scholar.google.com/citations?user=L38xA_8AAAAJ&hl}{Google Scholar}
+   \qquad
+  \href{mailto:pasquini.dario.1991@gmail.com}{pasquini.dario.1991@gmail.com \faEnvelope} 
   }
   
 
@@ -89,28 +93,25 @@
 %\section*{Bio:}  
 \vspace{.2cm}
  %\noindent Machine Learning Researcher operating at the bleeding edge of the intersection of Security and ``AI'', seeking security and privacy for intelligent systems that transcend trust, ideal assumptions, and optimistic threat models \textcolor{gray}{(\textit{although, in practice, I end up spending most of my day either breaking ML models or building ML models to break stuff})}.
- \ifita
- \noindent Researcher working on the intersection of Security and ``AI'', seeking security and privacy solutions that transcend trust, ideal assumptions, and optimistic threat models. Applying Machine Learning techniques to cybersecurity challenges.
- \else
-  \noindent Working on Security and Machine Learning \textcolor{gray}{(\textit{people call it ``AI'' now)}}, seeking security and privacy solutions that transcend trust, ideal assumptions, and optimistic threat models \textcolor{gray}{(\textit{although, in practice, I end up spending most of my day either breaking ML models or building ML models to break stuff})}.
- \fi
- % \noindent \textit{Security} researcher seeking security and privacy solutions that transcend trust, ideal assumptions, and optimistic threat models \textcolor{gray}{(\textit{although, in practice, I end up spending most of my day either breaking ML models or building ML models to break stuff})}.
+Working on the intersection of Security and ML, seeking security and privacy solutions that transcend trust, ideal assumptions, and optimistic threat models \textcolor{gray}{(\textit{although, in practice, I end up spending most of my day either breaking AI models or building AI models to break stuff})}.
+
+ 
+  % \noindent \textit{Security} researcher seeking security and privacy solutions that transcend trust, ideal assumptions, and optimistic threat models \textcolor{gray}{(\textit{although, in practice, I end up spending most of my day either breaking ML models or building ML models to break stuff})}.
  
 
-\subsection*{Working on:} 
+\subsection*{Interested in:} 
 \itemsep0em 
 \begin{itemize}
 \itemsep0em 
-\item Security \& Privacy in Machine Learning:
-	\begin{itemize}
-	\item[$\bullet$] LLMs/LLM-agents \cite{nes, llmmap, hackai}
-		\item[$\bullet$]  ``Collaborative Learning'' \cite{dl, CCS21, CCS22}  		
-	\end{itemize}
-\item Password Security \cite{uncm, SP21, adam}
-\item Leakage in Cryptosystems \cite{MIGP, CCS22} 
-\item Differential Privacy \cite{uncm}
-\item \textcolor{gray}{
- HPC; GPGPU, Multi-GPU \cite{MONOAMG}}
+
+
+\item[$\blacktriangle$] Security in LLMs/agents \cite{nes, llmmap, hackai}
+\item[$\blacktriangledown$] {Security \& Privacy in Collaborative Machine Learning} \cite{dl, CCS21, CCS22}  		
+\item[$\blacktriangledown$] Password Security \cite{uncm, SP21, adam}
+\item[$\blacktriangle$] Leakage in Cryptosystems \cite{MIGP, CCS22} 
+\item[$\blacktriangle$] Differential Privacy \cite{uncm}
+\item[$\blacktriangledown$] 
+ HPC; GPGPU, Multi-GPU \cite{MONOAMG}
 \end{itemize}
 
 \noindent\makebox[\linewidth]{\rule{.8\paperwidth}{0.3pt}}
@@ -197,13 +198,13 @@ Program of Study: \textit{Network and Security}
 \begin{itemize}
 	\item  \textbf{Machine Learning:} 
 	\begin{itemize}
-		\item TensorFlow (e.g., \href{https://github.com/TheAdamProject/UniversalNeuralCrackingMachines}{UniversalNeuralCrackingMachines}, \href{https://github.com/TheAdamProject/adams}{ADAMS}, \href{https://github.com/pasquini-dario/SplitNN_FSHA}{SplitNN\_FSHA}, \href{https://github.com/pasquini-dario/PLR}{PLR})
+		\item TensorFlow (e.g., \href{https://github.com/TheAdamProject/UniversalNeuralCrackingMachines}{UniversalNeuralCrackingMachines}, \href{https://github.com/TheAdamProject/adams}{ADAMS})%, \href{https://github.com/pasquini-dario/SplitNN_FSHA}{SplitNN\_FSHA}, \href{https://github.com/pasquini-dario/PLR}{PLR})
 		\item PyTorch (e.g., \href{https://github.com/pasquini-dario/LLM_NeuralExec}{NeuralExec},  \href{https://github.com/pasquini-dario/LLMmap}{LLMmap})
 	\end{itemize}
 	
 	\textbf{General purpose languages \& libs}:
 	\begin{itemize}
-		\item Python
+		\item Python (e.g., \href{https://github.com/pasquini-dario/project_mantis/}{project\_mantis})
 		\item MPI, CUDA (e.g., \href{https://github.com/bootcmatch/BootCMatchG/}{BootCMatchG})
 		\item  C / C++
 	\end{itemize}
@@ -217,6 +218,7 @@ Program of Study: \textit{Network and Security}
 	\begin{itemize}
 		\item ACM CCS 2023, 2025, 2026
 		\item USENIX Sec. 2023, 2025
+		\item IEEE S\&P 2026
 		\item IEEE SaTML 2024, 2025, 2026
 		\item PETS 2025.
 	\end{itemize} 
@@ -237,15 +239,15 @@ Program of Study: \textit{Network and Security}
 %\noindent\makebox[\linewidth]{\rule{.2\paperwidth}{0.3pt}}
 
 
-\section*{Real skills:}  
+\section*{Real-world skills:}  
 \begin{itemize}
 	\itemsep0em 
 	\item[--] Open water swimmer 
-	\item[--]  \textcolor{gray}{ex}-Triathlete
+	%\item[--]  \textcolor{gray}{ex}-Triathlete
 	\item[--]  \textcolor{gray}{ex}-MMA practitioner
 \ifita
 \else
-	\item[--]  \textit{Pizzaiolo}
+%	\item[--]  \textit{Pizzaiolo}
 	\item[--]  Weekend quant
 \fi
 \end{itemize}
@@ -262,8 +264,8 @@ Program of Study: \textit{Network and Security}
 \setcounter{enumiv}{7} 
 	
 	
-	\bibitem[ArXiv24b]{hackai}
-	\textbf{Dario Pasquini},  Evgenios M. Kornaropoulos, Giuseppe Ateniese. \textit{Hacking Back the AI-Hacker: Prompt Injection as a Defense Against LLM-driven Cyberattacks} \url{https://arxiv.org/pdf/2410.20911}
+	\bibitem[ArXiv24]{hackai}
+	\textbf{Dario Pasquini},  Evgenios M. Kornaropoulos, Giuseppe Ateniese. \textit{Hacking Back the AI-Hacker: Prompt Injection as a Defense Against LLM-driven Cyberattacks}  \textcolor{orange}{(Finalist in the ``Epic Achievement'' Category PwnieAwards 2025)}  \url{https://arxiv.org/pdf/2410.20911}
 	
 	
 
