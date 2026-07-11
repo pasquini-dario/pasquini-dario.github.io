@@ -15,8 +15,9 @@ explicitly asking — it would break the "just push files" contract this whole d
 |------|------|
 | `post.html` | The renderer. Reads `?p=<slug>`, validates it against `posts.json`, fetches `posts/<slug>.md`, renders it. This is the core. |
 | `index.html` | Post listing. Fetches `posts.json`, sorts newest-first, links to `post.html?p=<slug>`. |
-| `blog.css` | Standalone stylesheet. **Do NOT replace with `../main.css`** (see Invariants). |
-| `posts.json` | The metadata index: `[{slug, title, date (YYYY-MM-DD), description}]`. Source of truth for what exists. |
+| `blog.css` | Standalone, themed stylesheet (CSS custom properties). **Do NOT replace with `../main.css`** (see Invariants). |
+| `theme.js` | Shared dark/light toggle. Dark is the default; the reader's choice is persisted in `localStorage["blog-theme"]`. |
+| `posts.json` | The metadata index: `[{slug, title, date (YYYY-MM-DD), description, author?}]`. Source of truth for what exists. `author` is optional (string or array of names). |
 | `feed.xml` | Hand-maintained Atom feed. One `<entry>` per post; template comment is inside. |
 | `posts/*.md` | The post bodies. |
 | `posts/images/` | Post images live here, referenced relatively (e.g. `images/foo.png`). |
@@ -28,11 +29,14 @@ Libraries load from jsDelivr, **versions pinned exactly** (never `@latest`):
 - `katex@0.17.0` — math typesetting
 - `marked@18.0.6` — Markdown → HTML (GFM tables on, raw HTML passed through)
 - `marked-katex-extension@5.1.10` — captures `$...$` / `$$...$$` as marked tokens
-- `@highlightjs/cdn-assets@11.11.1` — code highlighting (github light theme)
-- `mermaid@11.16.0` — diagrams, lazy-imported as ESM only when a post contains one
+- `@highlightjs/cdn-assets@11.11.1` — code highlighting. **Both** `github-dark.min.css`
+  and `github.min.css` are loaded (with `id="hljs-dark"` / `id="hljs-light"`); `theme.js`
+  enables one via the `disabled` attribute so code matches the active theme.
+- `mermaid@11.16.0` — diagrams, lazy-imported as ESM only when a post contains one.
+  Theme-aware: `dark` theme in dark mode, `neutral` in light mode; re-rendered on toggle.
 
 Order of operations: `marked.parse(md)` → `hljs.highlightElement` over `pre code` →
-`mermaid.run()` over `.mermaid`.
+wrap `<table>`s in `.table-wrap` (for mobile scroll) → render `.mermaid` diagrams.
 
 ## Invariants — do not break these
 
@@ -60,9 +64,11 @@ Order of operations: `marked.parse(md)` → `hljs.highlightElement` over `pre co
 5. **`blog.css` is standalone on purpose. Do not link `../main.css`.** Two reasons:
    `main.css` `@import`s a `fontawesome-all.min.css` that isn't in the repo (a permanent
    404), and it hard-codes the fixed-sidebar layout (`#header{position:fixed}`,
-   `#main{margin-left:35%}`) which fights the centered reading column. `blog.css` instead
-   copies the ~15 relevant style values (fonts, colors, code/table rules). If you change
-   the site palette in `main.css`, mirror it here manually.
+   `#main{margin-left:35%}`) which fights the centered reading column. `blog.css` is its
+   own themeable stylesheet: all colors are CSS custom properties defined under
+   `:root[data-theme="dark"]` (the default) and `:root[data-theme="light"]`. To change a
+   color, edit the token, not the individual rules. Note the blog uses **Source Sans 3**
+   (a superset of the homepage's Source Sans Pro) with a monospace system stack for code.
 
 6. **Slug safety.** `post.html` only fetches a post after matching the `?p=` value against
    a `slug` in `posts.json`, and echoes an unknown slug to the page via `textContent`
@@ -72,11 +78,36 @@ Order of operations: `marked.parse(md)` → `hljs.highlightElement` over `pre co
    `mermaid.run` with `suppressErrors:true`; every `fetch` is wrapped so a missing file
    shows a friendly "Post not found" with a link back to the index.
 
+## Theming (dark by default)
+
+`theme.js` owns the light/dark switch. Mechanics:
+
+- The active theme is `document.documentElement.dataset.theme` (`"dark"` | `"light"`),
+  persisted as `localStorage["blog-theme"]`. **Dark is the default** when nothing is stored.
+- Each page has a tiny **inline `<head>` script** that sets `data-theme` (and, on
+  `post.html`, the `disabled` state of the two hljs stylesheets) *before first paint*, so
+  a returning light-theme reader doesn't see a dark flash. Keep that inline — moving it to
+  an external file reintroduces the flash.
+- `theme.js` (loaded `defer`) wires the `#theme-toggle` button, flips the tokens/stylesheet
+  on click, and dispatches a `themechange` CustomEvent.
+- `post.html` listens for `themechange` and **re-renders Mermaid** (it stores each diagram's
+  source, restores it, clears `data-processed`, re-`initialize`s with the new theme, and
+  re-`run`s). Mermaid can't restyle an already-rendered SVG, so re-rendering is required.
+- KaTeX inherits `color`, so math needs no per-theme handling. highlight.js needs the
+  stylesheet swap because its colors are baked into the CSS file, not variables.
+
+If you add a page, copy the inline `<head>` snippet, the `defer` `theme.js` tag, and the
+`#theme-toggle` button, or the toggle won't appear / the theme won't persist there.
+
 ## How to add a post
 
 1. Create `posts/<slug>.md`. **Start body headings at `##`** — the H1 title comes from
    `posts.json`, so don't put a `# Title` in the file. Put images in `posts/images/`.
-2. Add one object to `posts.json` (`slug`, `title`, `date` as `YYYY-MM-DD`, `description`).
+2. Add one object to `posts.json` (`slug`, `title`, `date` as `YYYY-MM-DD`, `description`,
+   and optionally `author`). `author` may be a single name or an array of names; when
+   omitted it defaults to **Dario Pasquini** (the `DEFAULT_AUTHOR` constant in both
+   `post.html` and `index.html`). The author(s) and date render together in the meta line,
+   e.g. `Dario Pasquini · July 11, 2026`, or `A and B · …` / `A, B and C · …` for multiple.
 3. Copy the `<!-- NEW POST TEMPLATE -->` `<entry>` in `feed.xml`, fill it in, and bump the
    feed-level `<updated>` to the new date.
 4. `git push`.

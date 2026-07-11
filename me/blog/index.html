@@ -7,10 +7,18 @@
 	<link rel="icon" type="image/x-icon" href="../favicon.ico" />
 	<link rel="alternate" type="application/atom+xml" title="Blog feed" href="feed.xml" />
 	<link rel="stylesheet" href="blog.css" />
+
+	<!-- Set theme before first paint (dark by default) to avoid a flash. -->
+	<script>
+		document.documentElement.dataset.theme =
+			(function () { try { return localStorage.getItem("blog-theme") || "dark"; } catch (e) { return "dark"; } })();
+	</script>
+	<script defer src="theme.js"></script>
 </head>
 <body>
 	<header class="blog-header">
-		<a href="../index.html">← Dario Pasquini</a>
+		<nav class="blog-nav"><a href="../index.html">← Home</a></nav>
+		<button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle theme">☀</button>
 	</header>
 
 	<main class="blog-container">
@@ -25,6 +33,17 @@
 	<script type="module">
 		const formatDate = (iso) => new Date(iso + "T00:00:00Z")
 			.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric", timeZone: "UTC" });
+
+		// Author(s) come from posts.json (string or array); default when absent.
+		const DEFAULT_AUTHOR = "Dario Pasquini";
+		const formatAuthors = (author) => {
+			let list = Array.isArray(author) ? author : author ? [author] : [];
+			list = list.map((a) => String(a).trim()).filter(Boolean);
+			if (list.length === 0) list = [DEFAULT_AUTHOR];
+			if (list.length === 1) return list[0];
+			if (list.length === 2) return `${list[0]} and ${list[1]}`;
+			return `${list.slice(0, -1).join(", ")} and ${list[list.length - 1]}`;
+		};
 
 		const list = document.querySelector("#post-list");
 
@@ -63,7 +82,7 @@
 
 				const meta = document.createElement("span");
 				meta.className = "post-meta";
-				meta.textContent = formatDate(post.date);
+				meta.textContent = `${formatAuthors(post.author)} · ${formatDate(post.date)}`;
 				li.appendChild(meta);
 
 				if (post.description) {

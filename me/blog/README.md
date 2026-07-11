@@ -6,6 +6,10 @@ add a couple of lines, and `git push` — GitHub Pages serves it and the browser
 Posts support **Markdown**, **LaTeX math** (`$inline$` and `$$display$$`),
 **Mermaid diagrams**, **syntax-highlighted code**, and there's an **RSS/Atom feed**.
 
+The blog is **dark by default**, with a ☀/☾ toggle in the top-right corner to switch to
+light; each reader's choice is remembered in their browser. You don't do anything special
+when writing — code, math, and diagrams follow the theme automatically.
+
 Live at <https://pasquini-dario.github.io/me/blog/>.
 
 ## Writing a new post
@@ -23,10 +27,14 @@ Live at <https://pasquini-dario.github.io/me/blog/>.
      "slug": "my-new-idea",
      "title": "My New Idea",
      "date": "2026-07-15",
+     "author": "Dario Pasquini",
      "description": "One sentence shown on the index and in the feed."
    }
    ```
-   (`date` is `YYYY-MM-DD`. The index sorts newest-first automatically.)
+   (`date` is `YYYY-MM-DD`. The index sorts newest-first automatically. `author` is
+   optional — leave it out and it defaults to **Dario Pasquini**; for a co-authored post
+   use a list, e.g. `"author": ["Dario Pasquini", "Michal"]`. The author and date show
+   together under the title.)
 
 3. **Add it to the feed** in `feed.xml`: copy the commented `NEW POST TEMPLATE` block,
    fill in the slug/title/date/summary, and bump the `<updated>` near the top of the file
