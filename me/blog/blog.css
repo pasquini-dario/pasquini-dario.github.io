@@ -1,0 +1,187 @@
+/* Blog styles — standalone, mirrors the values in ../main.css (HTML5 UP "Strata")
+   so posts read as the same site, but in a centered single reading column.
+   Weight 700 is loaded here (main.css only loads 400) so <strong> is a real bold. */
+
+@import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,400italic,700");
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+	margin: 0;
+	background: #fff;
+	color: #7d857f;
+	font-family: "Source Sans Pro", Helvetica, sans-serif;
+	font-size: 13pt;
+	font-weight: 400;
+	line-height: 1.75em;
+	-webkit-font-smoothing: antialiased;
+}
+
+/* Layout: one centered column, same feel as the homepage content width. */
+.blog-header,
+.blog-container {
+	max-width: 54em;
+	margin: 0 auto;
+	padding-left: 2em;
+	padding-right: 2em;
+}
+
+.blog-header {
+	padding-top: 1.5em;
+	padding-bottom: 1em;
+	margin-bottom: 2.5em;
+	border-bottom: solid 2px #efefef;
+	font-size: 0.95em;
+}
+
+.blog-container {
+	padding-bottom: 5em;
+}
+
+/* Links — teal with the template's dotted underline that clears on hover. */
+a {
+	color: #49bf9d;
+	text-decoration: none;
+	border-bottom: dotted 1px;
+	transition: color 0.2s ease-in-out, border-bottom-color 0.2s ease-in-out;
+}
+
+a:hover {
+	border-bottom-color: transparent;
+}
+
+/* Headings — dark charcoal-green, light weight, like the homepage. */
+h1, h2, h3, h4, h5, h6 {
+	color: #393d3a;
+	font-weight: 400;
+	line-height: 1.5em;
+	margin: 0 0 0.5em 0;
+}
+
+h1 { font-size: 2em; line-height: 1.2em; margin-top: 0; }
+h2 { font-size: 1.5em; margin-top: 1.5em; }
+h3 { font-size: 1.25em; margin-top: 1.25em; }
+h4 { font-size: 1.1em; }
+
+p { margin: 0 0 1.6em 0; }
+
+strong, b { color: #393d3a; font-weight: 700; }
+
+hr {
+	border: 0;
+	border-bottom: solid 2px #efefef;
+	margin: 2.5em 0;
+}
+
+/* Lists */
+ul, ol { margin: 0 0 1.6em 0; padding-left: 1.5em; }
+li { margin-bottom: 0.4em; }
+
+/* Post title block */
+#post-title { margin-bottom: 0.15em; }
+.post-meta {
+	color: #bdc9c1;
+	font-style: italic;
+	font-size: 0.9em;
+	margin-bottom: 2.5em;
+}
+
+/* Code — Courier on the template's light grey box with a 2px rule. */
+code, pre {
+	font-family: "Courier New", monospace;
+	font-size: 0.9em;
+}
+
+code {
+	background: #f7f7f7;
+	border: solid 2px #efefef;
+	border-radius: 4px;
+	padding: 0.05em 0.35em;
+}
+
+pre {
+	background: #f7f7f7;
+	border: solid 2px #efefef;
+	border-radius: 4px;
+	padding: 0.9em 1.1em;
+	overflow-x: auto;
+	line-height: 1.5em;
+	margin: 0 0 1.6em 0;
+}
+
+pre code {
+	background: none;
+	border: none;
+	padding: 0;
+	font-size: 1em;
+}
+
+/* highlight.js: neutralize the github theme's white box so our #f7f7f7 pre wins. */
+.hljs { background: transparent; padding: 0; }
+
+/* Blockquotes */
+blockquote {
+	border-left: solid 4px #efefef;
+	margin: 0 0 1.6em 0;
+	padding: 0.1em 0 0.1em 1.25em;
+	color: #7d857f;
+	font-style: italic;
+}
+blockquote p:last-child { margin-bottom: 0; }
+
+/* Images */
+img { max-width: 100%; height: auto; border-radius: 4px; }
+
+/* Tables — GFM, ruled in the template grey. */
+table {
+	border-collapse: collapse;
+	width: 100%;
+	margin: 0 0 1.6em 0;
+	font-size: 0.95em;
+}
+th {
+	color: #393d3a;
+	font-weight: 700;
+	text-align: left;
+	border-bottom: solid 2px #efefef;
+	padding: 0.5em 0.75em;
+}
+td {
+	border-bottom: solid 1px #efefef;
+	padding: 0.5em 0.75em;
+}
+
+/* Math — let long display equations scroll instead of overflowing. */
+.katex-display { overflow-x: auto; overflow-y: hidden; padding: 0.25em 0; }
+
+/* Mermaid — no code box; center the diagram. */
+pre.mermaid {
+	background: none;
+	border: none;
+	padding: 0;
+	text-align: center;
+	margin: 0 0 1.6em 0;
+}
+
+/* Index list */
+#post-list { list-style: none; padding: 0; margin: 0; }
+#post-list li { margin-bottom: 2em; }
+#post-list .post-title { font-size: 1.25em; }
+#post-list .post-meta { display: block; margin: 0.1em 0 0.3em 0; }
+#post-list p { margin: 0; }
+
+.blog-footer {
+	margin-top: 4em;
+	padding-top: 1.5em;
+	border-top: solid 2px #efefef;
+	font-size: 0.85em;
+	color: #bdc9c1;
+}
+
+@media (max-width: 736px) {
+	body { font-size: 12pt; }
+	.blog-header,
+	.blog-container { padding-left: 1.25em; padding-right: 1.25em; }
+	h1 { font-size: 1.75em; }
+	h2 { font-size: 1.35em; }
+}

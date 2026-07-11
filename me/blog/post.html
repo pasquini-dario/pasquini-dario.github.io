@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>Blog — Dario Pasquini</title>
+	<link rel="icon" type="image/x-icon" href="../favicon.ico" />
+	<link rel="alternate" type="application/atom+xml" title="Blog feed" href="feed.xml" />
+
+	<!-- Rendering libraries, pinned. Order matters: katex must load before
+	     marked-katex-extension (its UMD build binds the global `katex` at load). -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.css" />
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets@11.11.1/styles/github.min.css" />
+	<link rel="stylesheet" href="blog.css" />
+</head>
+<body>
+	<header class="blog-header">
+		<a href="../index.html">← Dario Pasquini</a> · <a href="index.html">Blog</a>
+	</header>
+
+	<main class="blog-container">
+		<h1 id="post-title">Loading…</h1>
+		<p id="post-date" class="post-meta"></p>
+		<article id="content">
+			<noscript>This blog renders Markdown in your browser, so it needs JavaScript enabled.</noscript>
+		</article>
+	</main>
+
+	<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/marked@18.0.6/lib/marked.umd.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/marked-katex-extension@5.1.10/lib/index.umd.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets@11.11.1/highlight.min.js"></script>
+
+	<script type="module">
+		const $ = (sel) => document.querySelector(sel);
+
+		const escapeHtml = (s) => s
+			.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+		// Parse the date as UTC so the displayed day never shifts by timezone.
+		const formatDate = (iso) => new Date(iso + "T00:00:00Z")
+			.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric", timeZone: "UTC" });
+
+		function fail(msg, slug) {
+			document.title = "Post not found — Dario Pasquini";
+			$("#post-title").textContent = "Post not found";
+			$("#post-date").textContent = "";
+			const p = document.createElement("p");
+			// slug is echoed via textContent only — never injected as HTML or into a path.
+			p.textContent = msg + (slug ? ` (“${slug}”)` : "") + ". ";
+			const a = document.createElement("a");
+			a.href = "index.html";
+			a.textContent = "Back to the blog index.";
+			p.appendChild(a);
+			$("#content").replaceChildren(p);
+		}
+
+		// --- marked configuration -------------------------------------------------
+		// Math is tokenized by markedKatex BEFORE emphasis parsing, so underscores /
+		// asterisks inside $...$ are never turned into <em>. Bad TeX won't throw.
+		marked.use(window.markedKatex({ throwOnError: false, nonStandard: true }));
+
+		// Divert ```mermaid fences to <pre class="mermaid"> (source HTML-escaped so
+		// arrows like --> survive innerHTML). Everything else uses the default renderer.
+		marked.use({
+			gfm: true,
+			renderer: {
+				code(token) {
+					const lang = (token.lang || "").trim().toLowerCase();
+					if (lang === "mermaid") {
+						return `<pre class="mermaid">${escapeHtml(token.text)}</pre>`;
+					}
+					return false; // fall through to marked's default code renderer
+				}
+			}
+		});
+
+		async function main() {
+			const slug = new URLSearchParams(location.search).get("p");
+			if (!slug) return fail("No post specified");
+
+			let posts;
+			try {
+				const res = await fetch("posts.json", { cache: "no-cache" });
+				if (!res.ok) return fail("Could not load the post index");
+				posts = await res.json();
+			} catch (e) {
+				console.error(e);
+				return fail("Could not load the post index");
+			}
+
+			const post = posts.find((p) => p.slug === slug);
+			if (!post) return fail("No such post", slug);
+
+			document.title = `${post.title} — Dario Pasquini`;
+			$("#post-title").textContent = post.title;
+			$("#post-date").textContent = formatDate(post.date);
+
+			let md;
+			try {
+				const res = await fetch(`posts/${encodeURIComponent(post.slug)}.md`, { cache: "no-cache" });
+				if (!res.ok) return fail("Post file is missing", post.slug);
+				md = await res.text();
+			} catch (e) {
+				console.error(e);
+				return fail("Post file is missing", post.slug);
+			}
+
+			$("#content").innerHTML = marked.parse(md);
+
+			// Syntax highlighting. `pre code` skips mermaid blocks (they have no <code>).
+			$("#content").querySelectorAll("pre code").forEach((el) => hljs.highlightElement(el));
+
+			// Render mermaid diagrams, loading the library only if the post uses one.
+			if ($("#content").querySelector(".mermaid")) {
+				try {
+					const { default: mermaid } =
+						await import("https://cdn.jsdelivr.net/npm/mermaid@11.16.0/dist/mermaid.esm.min.mjs");
+					mermaid.initialize({
+						startOnLoad: false,
+						securityLevel: "strict",
+						theme: "neutral",
+						themeVariables: { fontFamily: '"Source Sans Pro", Helvetica, sans-serif' }
+					});
+					// suppressErrors: one broken diagram won't blank the whole post.
+					await mermaid.run({ querySelector: ".mermaid", suppressErrors: true });
+				} catch (e) {
+					console.error("mermaid failed to load:", e);
+				}
+			}
+		}
+
+		main().catch((e) => { console.error(e); fail("Rendering failed"); });
+	</script>
+</body>
+</html>

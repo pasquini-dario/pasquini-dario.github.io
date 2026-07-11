@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>Blog — Dario Pasquini</title>
+	<link rel="icon" type="image/x-icon" href="../favicon.ico" />
+	<link rel="alternate" type="application/atom+xml" title="Blog feed" href="feed.xml" />
+	<link rel="stylesheet" href="blog.css" />
+</head>
+<body>
+	<header class="blog-header">
+		<a href="../index.html">← Dario Pasquini</a>
+	</header>
+
+	<main class="blog-container">
+		<h1>Blog</h1>
+		<ul id="post-list"><li>Loading…</li></ul>
+
+		<footer class="blog-footer">
+			<a href="feed.xml">RSS feed</a>
+		</footer>
+	</main>
+
+	<script type="module">
+		const formatDate = (iso) => new Date(iso + "T00:00:00Z")
+			.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric", timeZone: "UTC" });
+
+		const list = document.querySelector("#post-list");
+
+		function message(text) {
+			list.replaceChildren();
+			const li = document.createElement("li");
+			li.textContent = text;
+			list.appendChild(li);
+		}
+
+		async function main() {
+			let posts;
+			try {
+				const res = await fetch("posts.json", { cache: "no-cache" });
+				if (!res.ok) return message("Could not load posts.");
+				posts = await res.json();
+			} catch (e) {
+				console.error(e);
+				return message("Could not load posts.");
+			}
+
+			if (!Array.isArray(posts) || posts.length === 0) return message("No posts yet.");
+
+			// Newest first — ISO date strings sort lexicographically.
+			posts.sort((a, b) => b.date.localeCompare(a.date));
+
+			list.replaceChildren();
+			for (const post of posts) {
+				const li = document.createElement("li");
+
+				const a = document.createElement("a");
+				a.className = "post-title";
+				a.href = `post.html?p=${encodeURIComponent(post.slug)}`;
+				a.textContent = post.title;
+				li.appendChild(a);
+
+				const meta = document.createElement("span");
+				meta.className = "post-meta";
+				meta.textContent = formatDate(post.date);
+				li.appendChild(meta);
+
+				if (post.description) {
+					const p = document.createElement("p");
+					p.textContent = post.description;
+					li.appendChild(p);
+				}
+
+				list.appendChild(li);
+			}
+		}
+
+		main().catch((e) => { console.error(e); message("Could not load posts."); });
+	</script>
+</body>
+</html>
