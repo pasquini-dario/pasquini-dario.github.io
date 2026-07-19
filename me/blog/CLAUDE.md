@@ -35,8 +35,19 @@ Libraries load from jsDelivr, **versions pinned exactly** (never `@latest`):
 - `mermaid@11.16.0` — diagrams, lazy-imported as ESM only when a post contains one.
   Theme-aware: `dark` theme in dark mode, `neutral` in light mode; re-rendered on toggle.
 
-Order of operations: `marked.parse(md)` → `hljs.highlightElement` over `pre code` →
-wrap `<table>`s in `.table-wrap` (for mobile scroll) → render `.mermaid` diagrams.
+Order of operations: `marked.parse(md)` → **resolve post-relative image paths**
+(prefix bare-relative `<img src>` with `posts/`) → `hljs.highlightElement` over
+`pre code` → wrap `<table>`s in `.table-wrap` (for mobile scroll) → render `.mermaid`
+diagrams.
+
+**Why the image-path rewrite exists:** posts reference images as `images/foo.png`
+(files in `posts/images/`), but the rendered Markdown is injected into `post.html`,
+which lives at `me/blog/post.html`. Relative `src`es therefore resolve against
+`me/blog/`, not `posts/`, so without rewriting they 404. The renderer prefixes any
+bare-relative image `src` with `posts/`; absolute URLs, protocol-relative (`//`),
+root-relative (`/`), fragment (`#`), and `data:` URIs are left untouched. Keep this
+step if you touch the pipeline — it's what makes the documented `images/foo.png`
+authoring convention actually work.
 
 ## Invariants — do not break these
 

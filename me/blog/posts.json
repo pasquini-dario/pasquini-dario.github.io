@@ -4,13 +4,6 @@
     "title": "Lying Your Way Out of the (Claude Code) Sandbox",
     "date": "2026-07-11",
     "author": "Dario Pasquini",
-    "description": "How a script can fabricate honest-looking sandbox violations to get itself run outside the sandbox — with user approval."
-  },
-  {
-    "slug": "rendering-test",
-    "title": "Rendering Test",
-    "date": "2026-07-10",
-    "author": "Dario Pasquini",
-    "description": "A throwaway post that exercises math, tables, code highlighting and diagrams. Safe to delete."
+    "description": "How a malicious script can fabricate honest-looking sandbox violations to get itself run outside the sandbox — with user approval."
   }
 ]

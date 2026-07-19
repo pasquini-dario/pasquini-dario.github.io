@@ -26,14 +26,6 @@
     <link href="https://pasquini-dario.github.io/me/blog/post.html?p=lying-your-way-out-of-the-sandbox"/>
     <id>tag:pasquini-dario.github.io,2026:/me/blog/lying-your-way-out-of-the-sandbox</id>
     <updated>2026-07-11T00:00:00Z</updated>
-    <summary>How a script can fabricate honest-looking sandbox violations to get itself run outside the sandbox — with user approval.</summary>
-  </entry>
-
-  <entry>
-    <title>Rendering Test</title>
-    <link href="https://pasquini-dario.github.io/me/blog/post.html?p=rendering-test"/>
-    <id>tag:pasquini-dario.github.io,2026:/me/blog/rendering-test</id>
-    <updated>2026-07-10T00:00:00Z</updated>
-    <summary>A throwaway post that exercises math, tables, code highlighting and diagrams. Safe to delete.</summary>
+    <summary>How a malicious script can fabricate honest-looking sandbox violations to get itself run outside the sandbox — with user approval.</summary>
   </entry>
 </feed>

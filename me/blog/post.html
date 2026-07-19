@@ -134,6 +134,16 @@
 
 			$("#content").innerHTML = marked.parse(md);
 
+			// Resolve post-relative asset paths. Posts live in posts/ and reference
+			// images as `images/foo.png`, but this page is me/blog/post.html, so a bare
+			// relative src would resolve against me/blog/ (one level too high). Prefix
+			// relative image srcs with posts/; leave absolute URLs, //, /, # and data: alone.
+			$("#content").querySelectorAll("img[src]").forEach((img) => {
+				const src = img.getAttribute("src");
+				if (/^([a-z][a-z0-9+.-]*:|\/\/|\/|#)/i.test(src)) return;
+				img.setAttribute("src", "posts/" + src.replace(/^\.\//, ""));
+			});
+
 			// Syntax highlighting. `pre code` skips mermaid blocks (they have no <code>).
 			$("#content").querySelectorAll("pre code").forEach((el) => hljs.highlightElement(el));
 
