@@ -1,0 +1,9 @@
+[
+  {
+    "slug": "lying-your-way-out-of-the-sandbox",
+    "title": "Lying Your Way Out of the (Claude Code) Sandbox",
+    "date": "2026-07-11",
+    "author": "Dario Pasquini",
+    "description": "How a malicious script can fabricate honest-looking sandbox violations to get itself run outside the sandbox — with user approval."
+  }
+]

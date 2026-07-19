@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>Blog — Dario Pasquini</title>
+	<link rel="icon" type="image/x-icon" href="../favicon.ico" />
+	<link rel="alternate" type="application/atom+xml" title="Blog feed" href="feed.xml" />
+
+	<!-- Rendering libraries, pinned. Order matters: katex must load before
+	     marked-katex-extension (its UMD build binds the global `katex` at load). -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.css" />
+	<!-- Both highlight.js themes are present; the inline script below enables one. -->
+	<link id="hljs-dark" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets@11.11.1/styles/github-dark.min.css" />
+	<link id="hljs-light" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets@11.11.1/styles/github.min.css" disabled />
+	<link rel="stylesheet" href="blog.css" />
+
+	<!-- Set theme + code stylesheet before first paint (dark by default) to avoid a flash. -->
+	<script>
+		(function () {
+			var t; try { t = localStorage.getItem("blog-theme"); } catch (e) {}
+			t = t || "dark";
+			document.documentElement.dataset.theme = t;
+			var d = document.getElementById("hljs-dark"), l = document.getElementById("hljs-light");
+			if (d && l) { d.disabled = t !== "dark"; l.disabled = t === "dark"; }
+		})();
+	</script>
+	<script defer src="theme.js"></script>
+</head>
+<body>
+	<header class="blog-header">
+		<nav class="blog-nav"><a href="../index.html">← Home</a> · <a href="index.html">Blog</a></nav>
+		<button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle theme">☀</button>
+	</header>
+
+	<main class="blog-container">
+		<h1 id="post-title">Loading…</h1>
+		<p id="post-date" class="post-meta"></p>
+		<article id="content">
+			<noscript>This blog renders Markdown in your browser, so it needs JavaScript enabled.</noscript>
+		</article>
+	</main>
+
+	<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/marked@18.0.6/lib/marked.umd.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/marked-katex-extension@5.1.10/lib/index.umd.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets@11.11.1/highlight.min.js"></script>
+
+	<script type="module">
+		const $ = (sel) => document.querySelector(sel);
+
+		const escapeHtml = (s) => s
+			.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+		// Parse the date as UTC so the displayed day never shifts by timezone.
+		const formatDate = (iso) => new Date(iso + "T00:00:00Z")
+			.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric", timeZone: "UTC" });
+
+		// Author(s) come from posts.json (string or array); default when absent.
+		const DEFAULT_AUTHOR = "Dario Pasquini";
+		const formatAuthors = (author) => {
+			let list = Array.isArray(author) ? author : author ? [author] : [];
+			list = list.map((a) => String(a).trim()).filter(Boolean);
+			if (list.length === 0) list = [DEFAULT_AUTHOR];
+			if (list.length === 1) return list[0];
+			if (list.length === 2) return `${list[0]} and ${list[1]}`;
+			return `${list.slice(0, -1).join(", ")} and ${list[list.length - 1]}`;
+		};
+
+		function fail(msg, slug) {
+			document.title = "Post not found — Dario Pasquini";
+			$("#post-title").textContent = "Post not found";
+			$("#post-date").textContent = "";
+			const p = document.createElement("p");
+			// slug is echoed via textContent only — never injected as HTML or into a path.
+			p.textContent = msg + (slug ? ` (“${slug}”)` : "") + ". ";
+			const a = document.createElement("a");
+			a.href = "index.html";
+			a.textContent = "Back to the blog index.";
+			p.appendChild(a);
+			$("#content").replaceChildren(p);
+		}
+
+		// --- marked configuration -------------------------------------------------
+		// Math is tokenized by markedKatex BEFORE emphasis parsing, so underscores /
+		// asterisks inside $...$ are never turned into <em>. Bad TeX won't throw.
+		marked.use(window.markedKatex({ throwOnError: false, nonStandard: true }));
+
+		// Divert ```mermaid fences to <pre class="mermaid"> (source HTML-escaped so
+		// arrows like --> survive innerHTML). Everything else uses the default renderer.
+		marked.use({
+			gfm: true,
+			renderer: {
+				code(token) {
+					const lang = (token.lang || "").trim().toLowerCase();
+					if (lang === "mermaid") {
+						return `<pre class="mermaid">${escapeHtml(token.text)}</pre>`;
+					}
+					return false; // fall through to marked's default code renderer
+				}
+			}
+		});
+
+		async function main() {
+			const slug = new URLSearchParams(location.search).get("p");
+			if (!slug) return fail("No post specified");
+
+			let posts;
+			try {
+				const res = await fetch("posts.json", { cache: "no-cache" });
+				if (!res.ok) return fail("Could not load the post index");
+				posts = await res.json();
+			} catch (e) {
+				console.error(e);
+				return fail("Could not load the post index");
+			}
+
+			const post = posts.find((p) => p.slug === slug);
+			if (!post) return fail("No such post", slug);
+
+			document.title = `${post.title} — Dario Pasquini`;
+			$("#post-title").textContent = post.title;
+			$("#post-date").textContent = `${formatAuthors(post.author)} · ${formatDate(post.date)}`;
+
+			let md;
+			try {
+				const res = await fetch(`posts/${encodeURIComponent(post.slug)}.md`, { cache: "no-cache" });
+				if (!res.ok) return fail("Post file is missing", post.slug);
+				md = await res.text();
+			} catch (e) {
+				console.error(e);
+				return fail("Post file is missing", post.slug);
+			}
+
+			$("#content").innerHTML = marked.parse(md);
+
+			// Resolve post-relative asset paths. Posts live in posts/ and reference
+			// images as `images/foo.png`, but this page is me/blog/post.html, so a bare
+			// relative src would resolve against me/blog/ (one level too high). Prefix
+			// relative image srcs with posts/; leave absolute URLs, //, /, # and data: alone.
+			$("#content").querySelectorAll("img[src]").forEach((img) => {
+				const src = img.getAttribute("src");
+				if (/^([a-z][a-z0-9+.-]*:|\/\/|\/|#)/i.test(src)) return;
+				img.setAttribute("src", "posts/" + src.replace(/^\.\//, ""));
+			});
+
+			// Syntax highlighting. `pre code` skips mermaid blocks (they have no <code>).
+			$("#content").querySelectorAll("pre code").forEach((el) => hljs.highlightElement(el));
+
+			// Let wide tables scroll on narrow screens instead of overflowing the page.
+			$("#content").querySelectorAll("table").forEach((t) => {
+				const wrap = document.createElement("div");
+				wrap.className = "table-wrap";
+				t.replaceWith(wrap);
+				wrap.appendChild(t);
+			});
+
+			// Render mermaid diagrams, loading the library only if the post uses one.
+			// Diagrams are theme-aware and re-render when the reader toggles the theme.
+			const mermaidNodes = [...$("#content").querySelectorAll(".mermaid")];
+			if (mermaidNodes.length) {
+				const sources = mermaidNodes.map((n) => n.textContent);
+				const mermaidTheme = (t) => (t === "light" ? "neutral" : "dark");
+				let mermaid;
+				try {
+					({ default: mermaid } =
+						await import("https://cdn.jsdelivr.net/npm/mermaid@11.16.0/dist/mermaid.esm.min.mjs"));
+				} catch (e) {
+					console.error("mermaid failed to load:", e);
+				}
+				if (mermaid) {
+					const renderDiagrams = async (theme) => {
+						mermaidNodes.forEach((n, i) => {
+							n.textContent = sources[i];       // restore source before re-processing
+							n.removeAttribute("data-processed");
+						});
+						mermaid.initialize({
+							startOnLoad: false,
+							securityLevel: "strict",
+							theme: mermaidTheme(theme),
+							themeVariables: { fontFamily: '"Source Sans 3", "Source Sans Pro", Helvetica, sans-serif' }
+						});
+						// suppressErrors: one broken diagram won't blank the whole post.
+						try {
+							await mermaid.run({ nodes: mermaidNodes, suppressErrors: true });
+						} catch (e) {
+							console.error("mermaid render failed:", e);
+						}
+					};
+					const currentTheme = () => document.documentElement.dataset.theme || "dark";
+					await renderDiagrams(currentTheme());
+					document.addEventListener("themechange", (e) => renderDiagrams(e.detail.theme));
+				}
+			}
+		}
+
+		main().catch((e) => { console.error(e); fail("Rendering failed"); });
+	</script>
+</body>
+</html>
