@@ -76,7 +76,9 @@
 
 				const a = document.createElement("a");
 				a.className = "post-title";
-				a.href = `post.html?p=${encodeURIComponent(post.slug)}`;
+				// Link to the per-post page (carries the social-preview <head>), not
+				// post.html?p= (which can't). See CLAUDE.md "Social / link previews".
+				a.href = `${encodeURIComponent(post.slug)}.html`;
 				a.textContent = post.title;
 				li.appendChild(a);
 

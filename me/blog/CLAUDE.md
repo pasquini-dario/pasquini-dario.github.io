@@ -13,16 +13,24 @@ explicitly asking — it would break the "just push files" contract this whole d
 
 | File | Role |
 |------|------|
-| `post.html` | The renderer. Reads `?p=<slug>`, validates it against `posts.json`, fetches `posts/<slug>.md`, renders it. This is the core. |
-| `index.html` | Post listing. Fetches `posts.json`, sorts newest-first, links to `post.html?p=<slug>`. |
+| `reader.js` | **The renderer** (shared ES module). Takes the slug from `window.BLOG_POST_SLUG` (set by a per-post page) or the `?p=` query param, validates it against `posts.json`, fetches `posts/<slug>.md`, renders it. This is the core; both `post.html` and every `<slug>.html` load it. |
+| `<slug>.html` | **One static page per post** (e.g. `lying-your-way-out-of-the-sandbox.html`). Carries the post's Open Graph / Twitter meta baked into `<head>` (for social link previews), sets `window.BLOG_POST_SLUG`, and loads `reader.js`. This is the **canonical, shareable URL** — the index and feed link here. |
+| `POST-TEMPLATE.html` | Copy-me template for a new `<slug>.html`. Fill in the ALL-CAPS placeholders; boilerplate stays. Not served to anyone; it's an authoring aid. |
+| `post.html` | Generic **fallback** reader — `post.html?p=<slug>` still renders any post via `reader.js`, but its `<head>` is generic, so a link to it gets only a generic preview. Kept for back-compat/deep-links; prefer `<slug>.html`. |
+| `index.html` | Post listing. Fetches `posts.json`, sorts newest-first, links to `<slug>.html`. |
 | `blog.css` | Standalone, themed stylesheet (CSS custom properties). **Do NOT replace with `../main.css`** (see Invariants). |
 | `theme.js` | Shared dark/light toggle. Dark is the default; the reader's choice is persisted in `localStorage["blog-theme"]`. |
 | `posts.json` | The metadata index: `[{slug, title, date (YYYY-MM-DD), description, author?}]`. Source of truth for what exists. `author` is optional (string or array of names). |
-| `feed.xml` | Hand-maintained Atom feed. One `<entry>` per post; template comment is inside. |
+| `feed.xml` | Hand-maintained Atom feed. One `<entry>` per post; template comment is inside. Entry links point at `<slug>.html`. |
 | `posts/*.md` | The post bodies. |
-| `posts/images/` | Post images live here, referenced relatively (e.g. `images/foo.png`). |
+| `posts/images/` | Post images live here, referenced relatively (e.g. `images/foo.png`). Also holds per-post Open Graph share images (e.g. `og-<slug>.png`, 1200×630). |
 
-## Render pipeline (in `post.html`)
+## Render pipeline (in `reader.js`)
+
+The pipeline lives in `reader.js` (a shared ES module). Each host page — `post.html`
+and every `<slug>.html` — includes the pinned library `<script>` tags (classic scripts,
+so they execute during parse) and then `<script type="module" src="reader.js">` (deferred,
+so it runs after the globals exist). Keep that ordering when you add a page.
 
 Libraries load from jsDelivr, **versions pinned exactly** (never `@latest`):
 
@@ -49,12 +57,62 @@ root-relative (`/`), fragment (`#`), and `data:` URIs are left untouched. Keep t
 step if you touch the pipeline — it's what makes the documented `images/foo.png`
 authoring convention actually work.
 
+## Social / link previews (Open Graph + Twitter Cards)
+
+**The problem this solves.** When someone pastes a link into X, LinkedIn, Slack,
+Facebook, WhatsApp, Discord, iMessage, etc., that platform's crawler fetches the URL
+and reads `<meta property="og:…">` / `<meta name="twitter:…">` from the **raw HTML**
+`<head>`. Crawlers **do not run JavaScript**. This blog renders in the browser, so:
+
+- A link to `post.html?p=<slug>` gets only a **generic** preview — every `?p=` URL
+  returns the identical `post.html`, and GitHub Pages can't vary the response by query
+  string, so the head is the same for all posts. (Setting meta from JS doesn't help;
+  the crawler already read the static head and left.)
+- Therefore **each post has its own static page, `<slug>.html`**, whose `<head>`
+  carries that post's meta. That file is the canonical, shareable URL — it's what the
+  index (`index.html`) and the feed (`feed.xml`) link to.
+
+**How a `<slug>.html` page works.** It is a thin wrapper: the same `<head>`/`<body>`
+skeleton as `post.html`, plus a block of static per-post meta tags, plus
+`<script>window.BLOG_POST_SLUG = "<slug>"</script>` before `reader.js`. `reader.js` then
+renders the post exactly as `post.html?p=` would. The `<h1>` title is also baked in
+(matches `posts.json`) so it shows before JS runs and for no-JS readers; `reader.js`
+overwrites it with the same value.
+
+**What you can customize in a preview** (all in the `<slug>.html` head — see the
+`<!-- per-post identity -->` block, and `POST-TEMPLATE.html` for a blank one):
+
+| Tag | Controls |
+|-----|----------|
+| `<title>` + `og:title` + `twitter:title` | the bold title line |
+| `og:description` + `twitter:description` + `<meta name="description">` | the gray blurb |
+| `og:image` + `twitter:image` | **the preview image** |
+| `og:url` + `<link rel="canonical">` | the canonical link |
+| `og:type` (`article`) / `og:site_name` | type + site label |
+| `article:published_time` / `article:author` | date + author (shown by some platforms) |
+| `twitter:card` | `summary_large_image` (big banner) or `summary` (small thumbnail) |
+
+**Image rules (important):**
+- `og:image` / `twitter:image` **must be absolute `https://…` URLs** — relative paths
+  are ignored by most crawlers. Base is `https://pasquini-dario.github.io/me/blog/`.
+- Ideal size is **1200×630** (1.91:1) for `summary_large_image`. `sips` can crop any
+  screenshot to that: `sips --resampleWidth 1200 in.png --out t.png` then
+  `sips --cropToHeightWidth 630 1200 t.png --out posts/images/og-<slug>.png`.
+- **Per-post image:** put an `og-<slug>.png` in `posts/images/` and point the meta at it.
+- **Default fallback:** if a post has no custom image, point `og:image` at the site
+  default `https://pasquini-dario.github.io/me/me.png` (what `POST-TEMPLATE.html` and
+  `post.html` use). Keep the meta in sync with `posts.json` by hand — the preview tags
+  are static HTML, so `posts.json` (read only by JS) can't drive them.
+
 ## Invariants — do not break these
 
-1. **Script load order is load-bearing.** In `post.html`, `katex.min.js` must load
-   **before** `marked-katex-extension`, because that extension's UMD build binds the
-   global `katex` at load time (`window.markedKatex = factory(window.katex)`). Reorder
-   them and math silently stops working.
+1. **Script load order is load-bearing.** In every host page (`post.html` and each
+   `<slug>.html`), `katex.min.js` must load **before** `marked-katex-extension`, because
+   that extension's UMD build binds the global `katex` at load time
+   (`window.markedKatex = factory(window.katex)`). Reorder them and math silently stops
+   working. The four library `<script>`s must also come **before**
+   `<script type="module" src="reader.js">` — though the module is deferred so this is
+   naturally satisfied, keep them in that order.
 
 2. **Math is tokenized, not post-processed.** We use `marked-katex-extension` so `$...$`
    becomes a marked *token before emphasis parsing*. This is deliberate: the naive
@@ -81,13 +139,21 @@ authoring convention actually work.
    color, edit the token, not the individual rules. Note the blog uses **Source Sans 3**
    (a superset of the homepage's Source Sans Pro) with a monospace system stack for code.
 
-6. **Slug safety.** `post.html` only fetches a post after matching the `?p=` value against
-   a `slug` in `posts.json`, and echoes an unknown slug to the page via `textContent`
-   only — never as HTML, never interpolated raw into a fetch path. Keep it that way.
+6. **Slug safety.** `reader.js` only fetches a post after matching the slug (from
+   `window.BLOG_POST_SLUG` or the `?p=` value) against a `slug` in `posts.json`, and
+   echoes an unknown slug to the page via `textContent` only — never as HTML, never
+   interpolated raw into a fetch path. Keep it that way. Note `BLOG_POST_SLUG` is set by
+   a hand-authored `<slug>.html`, not from user input.
 
 7. **Failures must degrade, not blank the page.** KaTeX runs with `throwOnError:false`;
    `mermaid.run` with `suppressErrors:true`; every `fetch` is wrapped so a missing file
    shows a friendly "Post not found" with a link back to the index.
+
+8. **One renderer, two entry points.** The render logic lives **only** in `reader.js`;
+   `post.html` and every `<slug>.html` are thin wrappers that load it. Don't fork the
+   pipeline back into a page's inline script. And every post in `posts.json` must have a
+   matching `<slug>.html` (the index links to it) — a missing wrapper 404s. The wrapper's
+   static preview meta must be kept in sync with `posts.json` by hand.
 
 ## Theming (dark by default)
 
@@ -117,11 +183,17 @@ If you add a page, copy the inline `<head>` snippet, the `defer` `theme.js` tag,
 2. Add one object to `posts.json` (`slug`, `title`, `date` as `YYYY-MM-DD`, `description`,
    and optionally `author`). `author` may be a single name or an array of names; when
    omitted it defaults to **Dario Pasquini** (the `DEFAULT_AUTHOR` constant in both
-   `post.html` and `index.html`). The author(s) and date render together in the meta line,
+   `reader.js` and `index.html`). The author(s) and date render together in the meta line,
    e.g. `Dario Pasquini · July 11, 2026`, or `A and B · …` / `A, B and C · …` for multiple.
-3. Copy the `<!-- NEW POST TEMPLATE -->` `<entry>` in `feed.xml`, fill it in, and bump the
-   feed-level `<updated>` to the new date.
-4. `git push`.
+3. **Create the per-post page** (this is the shareable URL and what makes link previews
+   work): copy `POST-TEMPLATE.html` to `<slug>.html` and fill in the ALL-CAPS
+   placeholders (`SLUG`, `TITLE`, `DESCRIPTION`, `YYYY-MM-DD`, `AUTHOR`, `OG_IMAGE`).
+   Keep title/description/date/author in sync with `posts.json`. For the share image,
+   either drop a 1200×630 `og-<slug>.png` in `posts/images/` and reference it, or leave
+   the default `https://pasquini-dario.github.io/me/me.png`. See "Social / link previews".
+4. Copy the `<!-- NEW POST TEMPLATE -->` `<entry>` in `feed.xml` (its link is `<slug>.html`),
+   fill it in, and bump the feed-level `<updated>` to the new date.
+5. `git push`.
 
 ## How to verify a change
 
@@ -133,9 +205,17 @@ python3 -m http.server 8000 --directory /Users/dariopasquini/Desktop/CV
 # open http://localhost:8000/me/blog/
 ```
 
-Check: index lists posts; a post renders (math with intact subscripts, mermaid SVG,
-highlighted code, ruled table); `post.html?p=nope` shows the not-found message;
-narrow viewport doesn't overflow (`pre`/`.katex-display` scroll).
+Check: index lists posts and links to `<slug>.html`; a **`<slug>.html`** page renders
+(math with intact subscripts, mermaid SVG, highlighted code, ruled table) — this is the
+path that matters now, not just `post.html?p=`; `post.html?p=nope` shows the not-found
+message; narrow viewport doesn't overflow (`pre`/`.katex-display` scroll).
+
+For **link previews**, crawlers read static HTML, so just view-source the `<slug>.html`
+and confirm the `og:*` / `twitter:*` tags and that `og:image`/`og:url` are absolute
+`https://…` URLs that resolve. After pushing, validate the live URL with a card debugger
+(e.g. LinkedIn Post Inspector, X Card Validator, or `https://opengraph.xyz`); these also
+prime the platform's cache. A **headless render check** of the pipeline (no browser) is
+in the section below.
 
 **Headless render check** (no browser needed): the render pipeline can be exercised in
 Node by loading the UMD builds in a `vm` context that acts like `window` (they take their

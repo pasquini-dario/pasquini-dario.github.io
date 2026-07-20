@@ -10,11 +10,12 @@
   <!-- NEW POST TEMPLATE: copy this <entry> block above the others, fill in
        SLUG / TITLE / YYYY-MM-DD / SUMMARY, and bump the feed-level <updated>
        above to the new post's date. Keep title + summary + link only (post
-       bodies are Markdown, not feed-safe HTML).
+       bodies are Markdown, not feed-safe HTML). The link is the per-post page
+       (SLUG.html), same URL the index links to.
 
   <entry>
     <title>TITLE</title>
-    <link href="https://pasquini-dario.github.io/me/blog/post.html?p=SLUG"/>
+    <link href="https://pasquini-dario.github.io/me/blog/SLUG.html"/>
     <id>tag:pasquini-dario.github.io,2026:/me/blog/SLUG</id>
     <updated>YYYY-MM-DDT00:00:00Z</updated>
     <summary>SUMMARY</summary>
@@ -23,7 +24,7 @@
 
   <entry>
     <title>Lying Your Way Out of the (Claude Code) Sandbox</title>
-    <link href="https://pasquini-dario.github.io/me/blog/post.html?p=lying-your-way-out-of-the-sandbox"/>
+    <link href="https://pasquini-dario.github.io/me/blog/lying-your-way-out-of-the-sandbox.html"/>
     <id>tag:pasquini-dario.github.io,2026:/me/blog/lying-your-way-out-of-the-sandbox</id>
     <updated>2026-07-11T00:00:00Z</updated>
     <summary>How a malicious script can fabricate honest-looking sandbox violations to get itself run outside the sandbox — with user approval.</summary>
