@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+	<!-- ===== Per-post identity (static so social crawlers, which don't run JS, read it) =====
+	     Keep these in sync with this post's entry in posts.json. og:image/og:url MUST be
+	     absolute https URLs. Swap og:image for a post-specific 1200x630 picture, or point it
+	     at the default (https://pasquini-dario.github.io/me/me.png) if the post has none. -->
+	<title>Lying Your Way Out of the (Claude Code) Sandbox — Dario Pasquini</title>
+	<meta name="description" content="How a malicious script can fabricate honest-looking sandbox violations to get itself run outside the sandbox — with user approval." />
+	<link rel="canonical" href="https://pasquini-dario.github.io/me/blog/lying-your-way-out-of-the-sandbox.html" />
+
+	<meta property="og:type" content="article" />
+	<meta property="og:site_name" content="Dario Pasquini — Blog" />
+	<meta property="og:title" content="Lying Your Way Out of the (Claude Code) Sandbox" />
+	<meta property="og:description" content="How a malicious script can fabricate honest-looking sandbox violations to get itself run outside the sandbox — with user approval." />
+	<meta property="og:url" content="https://pasquini-dario.github.io/me/blog/lying-your-way-out-of-the-sandbox.html" />
+	<meta property="og:image" content="https://pasquini-dario.github.io/me/blog/posts/images/og-lying-sandbox.png" />
+	<meta property="article:published_time" content="2026-07-11" />
+	<meta property="article:author" content="Dario Pasquini" />
+
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:title" content="Lying Your Way Out of the (Claude Code) Sandbox" />
+	<meta name="twitter:description" content="How a malicious script can fabricate honest-looking sandbox violations to get itself run outside the sandbox — with user approval." />
+	<meta name="twitter:image" content="https://pasquini-dario.github.io/me/blog/posts/images/og-lying-sandbox.png" />
+	<!-- ===== end per-post identity ===== -->
+
+	<link rel="icon" type="image/x-icon" href="../favicon.ico" />
+	<link rel="alternate" type="application/atom+xml" title="Blog feed" href="feed.xml" />
+
+	<!-- Rendering libraries, pinned. Order matters: katex must load before
+	     marked-katex-extension (its UMD build binds the global `katex` at load). -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.css" />
+	<!-- Both highlight.js themes are present; the inline script below enables one. -->
+	<link id="hljs-dark" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets@11.11.1/styles/github-dark.min.css" />
+	<link id="hljs-light" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets@11.11.1/styles/github.min.css" disabled />
+	<link rel="stylesheet" href="blog.css" />
+
+	<!-- Set theme + code stylesheet before first paint (dark by default) to avoid a flash. -->
+	<script>
+		(function () {
+			var t; try { t = localStorage.getItem("blog-theme"); } catch (e) {}
+			t = t || "dark";
+			document.documentElement.dataset.theme = t;
+			var d = document.getElementById("hljs-dark"), l = document.getElementById("hljs-light");
+			if (d && l) { d.disabled = t !== "dark"; l.disabled = t === "dark"; }
+		})();
+	</script>
+	<script defer src="theme.js"></script>
+</head>
+<body>
+	<header class="blog-header">
+		<nav class="blog-nav"><a href="../index.html">← Home</a> · <a href="index.html">Blog</a></nav>
+		<button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle theme">☀</button>
+	</header>
+
+	<main class="blog-container">
+		<!-- Title is baked in (matches posts.json) so it shows before JS runs; reader.js
+		     overwrites it with the same value. The body below is rendered from the .md. -->
+		<h1 id="post-title">Lying Your Way Out of the (Claude Code) Sandbox</h1>
+		<p id="post-date" class="post-meta"></p>
+		<article id="content">
+			<noscript>This blog renders Markdown in your browser, so it needs JavaScript enabled.</noscript>
+		</article>
+	</main>
+
+	<!-- Renderer globals (classic scripts, run during parse), then the shared module. -->
+	<script src="https://cdn.jsdelivr.net/npm/katex@0.17.0/dist/katex.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/marked@18.0.6/lib/marked.umd.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/marked-katex-extension@5.1.10/lib/index.umd.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets@11.11.1/highlight.min.js"></script>
+	<!-- Tells reader.js which post to render (must match a slug in posts.json). -->
+	<script>window.BLOG_POST_SLUG = "lying-your-way-out-of-the-sandbox";</script>
+	<script type="module" src="reader.js"></script>
+</body>
+</html>
