@@ -24,6 +24,7 @@ explicitly asking — it would break the "just push files" contract this whole d
 | `feed.xml` | Hand-maintained Atom feed. One `<entry>` per post; template comment is inside. Entry links point at `<slug>.html`. |
 | `posts/*.md` | The post bodies. |
 | `posts/images/` | Post images live here, referenced relatively (e.g. `images/foo.png`). Also holds per-post Open Graph share images (e.g. `og-<slug>.png`, 1200×630). |
+| `check-blog.py` | **Consistency checker** — pure-stdlib Python that verifies `posts.json` / `posts/<slug>.md` / `<slug>.html` / `feed.xml` agree and referenced images exist. Errors = mandatory material missing/broken (blocks commit); warnings = optional/drift. Wired to a `pre-commit` hook. See "Consistency check". |
 
 ## Render pipeline (in `reader.js`)
 
@@ -193,9 +194,62 @@ If you add a page, copy the inline `<head>` snippet, the `defer` `theme.js` tag,
    the default `https://pasquini-dario.github.io/me/me.png`. See "Social / link previews".
 4. Copy the `<!-- NEW POST TEMPLATE -->` `<entry>` in `feed.xml` (its link is `<slug>.html`),
    fill it in, and bump the feed-level `<updated>` to the new date.
-5. `git push`.
+5. **Run the consistency check** — `python3 me/blog/check-blog.py` (from the repo root).
+   Fix any ✗ ERRORs and review the ⚠ WARNs. This catches the easy-to-forget mistakes:
+   a missing `<slug>.html`, a title that drifted out of sync between `posts.json` and the
+   page's `og:title`, a broken image reference, an unfilled template placeholder, a
+   forgotten `feed.xml` entry. The `pre-commit` hook runs it for you (see "Consistency
+   check"), but running it by hand first is faster than a rejected commit.
+6. `git push`.
+
+## Consistency check (`check-blog.py` + pre-commit hook)
+
+Because there's **no build step**, the four hand-maintained sources for a post —
+`posts.json`, `posts/<slug>.md`, `<slug>.html`, and the `feed.xml` `<entry>` — can silently
+drift apart (a title changed in one place but not the others, a `<slug>.html` never created,
+a template placeholder left unfilled, a broken image path). `check-blog.py` is the guard.
+It's **pure Python stdlib** (no deps — respects the "just push files" contract), reads the
+files, and reports; it never edits anything and nothing runs at serve time.
+
+**Run it before pushing** (from the repo root, or from `me/blog/` — it locates itself):
+
+```
+python3 me/blog/check-blog.py          # ✗ errors + ⚠ warnings; exit 1 if any error
+python3 me/blog/check-blog.py --strict # also exit 1 on warnings
+```
+
+**Severity split** (this is the contract the owner asked for):
+- **✗ ERROR = mandatory material missing/broken** → exit 1 (blocks the commit). E.g. a post
+  with no `title`/`date`/`description`, a bad date format, a missing `posts/<slug>.md` or
+  `<slug>.html`, a `BLOG_POST_SLUG` that doesn't match, a leftover template placeholder, or
+  an `og:image`/`twitter:image` that isn't an absolute `https://` URL (crawlers ignore
+  relative ones).
+- **⚠ WARN = optional material missing, or things drifted out of sync** → doesn't block. E.g.
+  `og:title`/`description`/`article:published_time`/`og:url`/canonical that don't match
+  `posts.json`, a missing `feed.xml` entry, a referenced image that doesn't exist, an
+  H1 at the top of the `.md`, an orphan `<slug>.html`/draft `.md`, a stale feed `<updated>`.
+
+**The pre-commit hook** lives at `.git/hooks/pre-commit`. It runs the checker **only when a
+commit stages files under `me/blog/`** (so unrelated commits to the rest of the repo aren't
+affected), and blocks the commit **on errors only** (warnings print but pass). Bypass in a
+pinch with `git commit --no-verify`.
+
+> **Hooks are not version-controlled.** `.git/hooks/` isn't part of the repo, so after a
+> fresh clone the hook won't exist — the *checker* (`check-blog.py`) still does. To reinstall
+> the hook, create `.git/hooks/pre-commit` (make it executable, `chmod +x`) with a shim that
+> runs the checker when blog files are staged:
+> ```sh
+> #!/bin/sh
+> root=$(git rev-parse --show-toplevel)
+> git diff --cached --name-only | grep -q '^me/blog/' || exit 0
+> python3 "$root/me/blog/check-blog.py"
+> ```
 
 ## How to verify a change
+
+**First, the cheap gate:** `python3 me/blog/check-blog.py` (see "Consistency check" above) —
+it catches missing files, out-of-sync preview meta, and broken image paths without a browser.
+Then verify rendering and previews:
 
 `fetch()` fails on `file://`, so you need HTTP. Serve the **repo root** (so `../me.png`
 etc. resolve like on Pages):
