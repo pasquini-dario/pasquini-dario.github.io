@@ -12,7 +12,7 @@
 \newcommand{\itascore}[1]{}
 \fi
 
-\documentclass[margin, 10pt]{article} % Use the res.cls style, the font size can be changed to 11pt or 12pt here
+\documentclass[10pt]{article} % Use the res.cls style, the font size can be changed to 11pt or 12pt here
 
 \usepackage{xcolor}
 \usepackage{graphicx}
@@ -29,7 +29,7 @@
     linkcolor=blue,
     filecolor=magenta,      
     urlcolor=blue,
-    pdftitle={Overleaf Example},
+    pdftitle={Dario Pasquini -- CV},
     pdfpagemode=FullScreen,
     citecolor = blue,
     }
@@ -93,24 +93,15 @@
 %\section*{Bio:}  
 \vspace{.2cm}
  %\noindent Machine Learning Researcher operating at the bleeding edge of the intersection of Security and ``AI'', seeking security and privacy for intelligent systems that transcend trust, ideal assumptions, and optimistic threat models \textcolor{gray}{(\textit{although, in practice, I end up spending most of my day either breaking ML models or building ML models to break stuff})}.
-\textit{``I spend most of my day either breaking AI models or building AI models to break stuff.}''
+%\textit{``I spend most of my day either breaking AI models or building AI models to break stuff.}''
 
  
   % \noindent \textit{Security} researcher seeking security and privacy solutions that transcend trust, ideal assumptions, and optimistic threat models \textcolor{gray}{(\textit{although, in practice, I end up spending most of my day either breaking ML models or building ML models to break stuff})}.
  
 
-\subsubsection*{Currently working on:} 
-\itemsep0em 
-\begin{itemize}
-\itemsep0em 
 
 
-\item[$\blacktriangle$] Security of LLMs/agents applications \cite{nes, llmmap, aioops}
-\item[$\blacktriangle$] LLMs/agents applications to cybersecurity \cite{hackai}
-
-\end{itemize}
-
-\noindent\makebox[\linewidth]{\rule{.8\paperwidth}{0.3pt}}
+%\noindent\makebox[\linewidth]{\rule{.8\paperwidth}{0.3pt}}
 
 
 \section*{Experience:} 
@@ -118,15 +109,18 @@
 \begin{description}
 	
 \item[[ {02/2026 - Now}]] \textbf{Head of AI}\textbf{:}\\
- \textbf{\textit{Cracken}}\\-\textit{Switzerland}
+ \textbf{\textit{Cracken}}\\
+ \textcolor{gray}{ \textcolor{gray}{Leading research and development of agentic systems for AI-augmented penetration testing and security operations, with a strong focus on AI safety, observability, and human control. Managing a team of engineers and cybersecurity researchers to build production-level agentic systems.}}\\
+ -\textit{Switzerland}
 
 \item[[ {11/2024 - 01/2026}]] \textbf{Principal Researcher}\textbf{:}\\
  \textbf{\textit{RSAC Labs}}\\
  % --
- %\textbf{Responsibilities:} {Leading research in AI security. Main projects include: (1) discovering vulnerabilities in and hardening Agentic AI for IT Operations (AIOps), and (2) discovering vulnerabilities in Apple Intelligence's on-device LLMs. Also researching and developing production machine-learning systems for RSAC's products.}\\
- -\textit{Switzerland}\\
+\textcolor{gray}{\textcolor{gray}{Leading research in AI security, focused on discovering vulnerabilities in and hardening Agentic AI for IT Operations (AIOps) and other LLM-based applications (e.g., AI SOCs, Apple Intelligence).}}\\
+ -\textit{Switzerland}
 
-\item \textcolor{gray}{----------------- academia --------------------------------------------------}\
+\item \textcolor{gray}{----------------- academia --------------------------------------------------}
+\item Research summary: \textcolor{gray}{Conducted research in classical adversarial machine learning, machine learning privacy and robustness, and \textit{``post-LLM'' AI security}, with a particular focus on indirect prompt injection. Applied machine learning to cybersecurity tasks, primarily automated password guessing, and explored ML-assisted attacks on cryptographic systems.}
 
 \item[[ {04/2024 - 10/2024}]] \textbf{Visiting Faculty:}\\
 %\textbf{where:}
@@ -144,23 +138,25 @@ Security and Privacy Engineering Laboratory (SPRING)\\
 -\textit{Switzerland}
 %\textbf{what:} \textit{``Leading research on: (1)~Security and Privacy of Machine Learning: Private Collaborative Learning and Large Language Models. (2)~Leading research on Machine Learning applications to security: Password Security and Cryptosystems.''}
 %Referent: \textit{Prof. Carmela Troncoso }(\textit{carmela.troncoso@epfl.ch})
-\item[[ 05/2020 - 9/2021]] \textbf{Research Fellow:}\\
-%\textbf{where:} 
+\item[[ 05/2020 - 09/2021]] \textbf{Research Fellow:}\\
+%\textbf{where:}
  \textbf{\textit{National Research Council (CNR)}}\\
-Institute for applied mathematics ``Mauro Picone'' (IAC)\\
+Institute for Applied Mathematics ``Mauro Picone'' (IAC)\\
 -\textit{Italy}
 %\textbf{what:} \textit{``Research and development of high performance, distributed, Multi-GPUs, solver for massive systems of linear equations.}''
 %Research and deployment of Multi-GPUs 
 %Referent: \textit{Prof. Massimo Bernaschi} (\textit{massimo.bernaschi@cnr.it})
 %\item[[ 2017 -  today]] \textbf{Collaborator IAC-CNR:}\\
 %Institute for applied mathematics "Mauro Picone" (IAC), Rome, Italy
-\item[[ 04/2019 - 04/2020]] \textbf{Visiting Researcher}:\\
+\item[[ 04/2019 - 04/2020]] \textbf{Visiting Researcher:}\\
 %\textbf{where:} 
  \textbf{\textit{Stevens Institute of Technology}}\\\textit{Computer Science department}\\ 
 -\textit{New Jersey, USA}
 %\textbf{what:} \textit{``Leading research on (1)~applications of Deep Learning in Password Security (2)~ Adversarial Machine Learning.}''
 %	Host: \textit{Prof. Giuseppe Ateniese} (\textit{ateniese@gmu.edu})
-	
+
+\end{description}
+
 %\noindent\makebox[\linewidth]{\rule{.1\paperwidth}{0.3pt}}
 \iffalse
 \section*{\normalsize{Contract \& Consulting work:}}
@@ -170,8 +166,7 @@ Institute for applied mathematics ``Mauro Picone'' (IAC)\\
 	 DSEC Labs LLC, Virginia, USA
 	 \item[[ 04/2024]] \textbf{Machine Learning Expert} (Security Auditing of Authentication Systems)\\
 	Detack GmbH, Germany\\
-	
-\end{description}
+
 \end{description}
 \noindent\makebox[\linewidth]{\rule{.2\paperwidth}{0.3pt}}
 \fi
@@ -184,7 +179,7 @@ Institute for applied mathematics ``Mauro Picone'' (IAC)\\
 Advisor: \textit{Prof. Massimo Bernaschi} (\textit{massimo.bernaschi@cnr.it})\\
 
 
-\item[[ 2015 - 2017]] \textbf{Master degree} in  \textbf{Computer Science}: \\
+\item[[ 2015 - 2017]] \textbf{Master's degree} in  \textbf{Computer Science}: \\
 \textit{Sapienza} University of Rome, Italy\\
 Final Grade: \textit{110/110} \textit{cum laude}\\
 Program of Study: \textit{Network and Security}
@@ -196,12 +191,31 @@ Program of Study: \textit{Network and Security}
 \noindent\makebox[\linewidth]{\rule{.2\paperwidth}{0.3pt}}
 
 
+\section*{Relevant work on AI security:}
+\begin{itemize}
+\item Security of LLM/agent applications
+	\begin{itemize}
+	\item \href{https://arxiv.org/pdf/2508.06394}{When AIOps Become ``AI Oops'': Subverting LLM-driven IT Operations via Telemetry Manipulation} (media coverage: \href{https://www.theregister.com/2025/08/12/ai_models_can_be_tricked/}{The Register})
+	\item \href{https://arxiv.org/pdf/2407.15847}{LLMmap: Fingerprinting for Large Language Models}
+	\item \href{https://arxiv.org/pdf/2403.03792}{Neural Exec: Learning (and Learning from) Execution Triggers for Prompt Injection Attacks}
+		\begin{itemize}
+		\item \href{https://www.rsaconference.com/library/blog/rotten-apples-the-technical-details-of-rsacs-successful-apple-intelligence-prompt-injection-attack}{Indirect Prompt Injection and Filter Bypass on Apple Intelligence} (media coverage: \href{https://www.theregister.com/2026/04/09/security_researchers_tricked_apple_intelligence/}{The Register}, \href{https://www.foxnews.com/tech/apple-intelligence-iphone-really-secure}{Fox News})
+		\end{itemize}
+	\item \href{https://pasquini-dario.github.io/me/blog/lying-your-way-out-of-the-sandbox.html}{Lying Your Way Out of the (Claude Code) Sandbox}
+	\end{itemize}
+\item LLM/agent applications to cybersecurity
+	\begin{itemize}
+	\item \href{https://arxiv.org/pdf/2606.24496}{Red-Teaming the Agentic Red-Team}
+	\item \href{https://arxiv.org/pdf/2410.20911}{Hacking Back the AI-Hacker: Prompt Injection as a Defense Against LLM-driven Cyberattacks} (media coverage: \href{https://www.darkreading.com/cybersecurity-operations/deceptive-framework-defense-mislead-attacking-ai}{Dark Reading})
+	\end{itemize}
+\end{itemize}
+
 \section*{Worked on:}
 \begin{itemize}
-\item[$\blacktriangle$] {Security \& Privacy in Collaborative Machine Learning} \cite{dl, CCS21, CCS22}  		
-\item[$\blacktriangle$] Password Security \cite{uncm, SP21, adam}
-\item[$\blacktriangle$] Leakage in Cryptosystems \cite{MIGP, CCS22} 
-\item[$\blacktriangle$] 
+\item {Security \& Privacy in Collaborative Machine Learning} \cite{dl, CCS21, CCS22}  		
+\item Password Security \cite{uncm, SP21, adam}
+\item Leakage in Cryptosystems \cite{MIGP, CCS22} 
+\item 
  HPC; GPGPU, Multi-GPU \cite{MONOAMG}
 \end{itemize}
 
@@ -212,14 +226,15 @@ Program of Study: \textit{Network and Security}
 	\begin{itemize}
 		\item ACM CCS 2023, 2025, 2026
 		\item USENIX Sec. 2023, 2025
+		\item USENIX SAIS 2027
 		\item IEEE S\&P 2026
 		\item IEEE SaTML 2024, 2025, 2026
-		\item PETS 2025.
+		\item PETS 2025
 	\end{itemize} 
 	\begin{itemize}
-		\item \textbf{Workshops:} CRYPTO PPML 2024
+		\item \textbf{Workshops:} CRYPTO PPML 2024, NeurIPS InfPriv 2026
 	\end{itemize}
-	\item \textbf{Teaching:} 2022/2023 \textit{``Privacy Preserving Machine Learning''} in  master course: \textit{``Advanced topics on privacy enhancing technologies''} (EPFL).
+	\item \textbf{Teaching:} 2022/2023 \textit{``Privacy Preserving Machine Learning''} in the master's course \textit{``Advanced topics on privacy enhancing technologies''} (EPFL).
 \end{itemize}
 
 
@@ -233,38 +248,50 @@ Program of Study: \textit{Network and Security}
 %\noindent\makebox[\linewidth]{\rule{.2\paperwidth}{0.3pt}}
 
 
-\ifita
-\section*{Technical Skills  \small{\textcolor{gray}{(at least, the ones you might want to pay me for)}}:}
-\else
-\section*{Technical Skills:}
-\fi 
-\begin{itemize}
-	\item  \textbf{Machine Learning:} 
-	\begin{itemize}
-		\item TensorFlow (e.g., \href{https://github.com/TheAdamProject/UniversalNeuralCrackingMachines}{UniversalNeuralCrackingMachines}, \href{https://github.com/TheAdamProject/adams}{ADAMS})%, \href{https://github.com/pasquini-dario/SplitNN_FSHA}{SplitNN\_FSHA}, \href{https://github.com/pasquini-dario/PLR}{PLR})
-		\item PyTorch (e.g., \href{https://github.com/pasquini-dario/LLM_NeuralExec}{NeuralExec},  \href{https://github.com/pasquini-dario/LLMmap}{LLMmap})
-	\end{itemize}
-	
-	\textbf{General purpose languages \& libs}:
-	\begin{itemize}
-		\item Python (e.g., \href{https://github.com/pasquini-dario/project_mantis/}{project\_mantis})
-		\item MPI, CUDA (e.g., \href{https://github.com/bootcmatch/BootCMatchG/}{BootCMatchG})
-		\item  C / C++
-	\end{itemize}
-	
-\end{itemize}
+%\ifita
+%\section*{Technical Skills  \small{\textcolor{gray}{(at least, the ones you might want to pay me for)}}:}
+%\else
+%\section*{Technical Skills:}
+%\fi 
+%\begin{itemize}
+%	\item  \textbf{Machine Learning:} 
+%	\begin{itemize}
+%		\item TensorFlow (e.g., \href{https://github.com/TheAdamProject/UniversalNeuralCrackingMachines}{UniversalNeuralCrackingMachines}, \href{https://github.com/TheAdamProject/adams}{ADAMS})%, \href{https://github.com/pasquini-dario/SplitNN_FSHA}{SplitNN\_FSHA}, \href{https://github.com/pasquini-dario/PLR}{PLR})
+%		\item PyTorch (e.g., \href{https://github.com/pasquini-dario/LLM_NeuralExec}{NeuralExec},  \href{https://github.com/pasquini-dario/LLMmap}{LLMmap})
+%	\end{itemize}
+%	
+%	\textbf{General purpose languages \& libs}:
+%	\begin{itemize}
+%		\item Python (e.g., \href{https://github.com/pasquini-dario/project_mantis/}{project\_mantis})
+%		\item MPI, CUDA (e.g., \href{https://github.com/bootcmatch/BootCMatchG/}{BootCMatchG})
+%		\item  C / C++
+%	\end{itemize}
+%	
+%\end{itemize}
 
-\section*{Real-world skills:}  
+%\section*{Real-world skills:}  
+%\begin{itemize}
+%	\itemsep0em 
+%	\item[--] Open water swimmer 
+%	%\item[--]  \textcolor{gray}{ex}-Triathlete
+%	\item[--]  \textcolor{gray}{ex}-MMA practitioner
+%\ifita
+%\else
+%%	\item[--]  \textit{Pizzaiolo}
+%	\item[--]  Weekend quant
+%\fi
+%\end{itemize}
+
+\noindent\makebox[\linewidth]{\rule{.2\paperwidth}{0.3pt}}
+\section*{Invited talks:}
 \begin{itemize}
-	\itemsep0em 
-	\item[--] Open water swimmer 
-	%\item[--]  \textcolor{gray}{ex}-Triathlete
-	\item[--]  \textcolor{gray}{ex}-MMA practitioner
-\ifita
-\else
-%	\item[--]  \textit{Pizzaiolo}
-	\item[--]  Weekend quant
-\fi
+\itemsep0em
+	\item \href{https://pasquini-dario.github.io/shibboleths.pdf}{``Say Shibboleth: Fingerprinting the model behind the attack''} [unprompted II (2026)]
+	\item \href{https://pasquini-dario.github.io/red_teaming_the_ai_red_team.pdf}{``Red-Teaming the AI-Red-Team''} [\href{https://www.youtube.com/watch?v=1zjRRML9AdE}{ELSA General Assembly workshop}]
+	\item \href{https://drive.google.com/file/d/1xv9YyYow7fGGV0_g8KZnglfCDIAomPqe/view?usp=sharing}{``Hacking-back the AI-Hacker (Mantis)''} [\href{https://www.youtube.com/watch?v=9aXgfQmIGoQ}{RSAC conference}]
+	\item \href{https://pasquini-dario.github.io/nn.pdf}{``Neural Exec: Learning Execution Triggers for Prompt Injection Attacks''} [Swiss AI Sec.\ Network, Sapienza University]
+	\item \href{https://pasquini-dario.github.io/PPCML.pdf}{``Privacy Preserving Collaborative Machine Learning?''} [CNR Italy, Inria Rennes, Monash University, Roma3 University, JPMorgan AlgoCRYPT Center of Excellence]
+	\item \href{https://drive.google.com/file/d/1MWtoJpqIsVgEhI15jQjWzuEX5YqJT4P4/view}{``Password Alchemy with Universal Neural-Cracking-Machines: Transmuting email addresses into Password Models''} [PasswordsCon'23, Roma3 University]
 \end{itemize}
 
 \noindent\makebox[\linewidth]{\rule{.2\paperwidth}{0.3pt}}
@@ -278,9 +305,10 @@ Program of Study: \textit{Network and Security}
 \begin{thebibliography}{99}
 \setcounter{enumiv}{7} 
 	
-	\bibitem[ArXiv24]{hackai}
-	\textbf{Dario Pasquini},  Evgenios M. Kornaropoulos, Giuseppe Ateniese. \textit{Hacking Back the AI-Hacker: Prompt Injection as a Defense Against LLM-driven Cyberattacks}  \textcolor{orange}{(Finalist in the ``Epic Achievement'' Category PwnieAwards 2025)}  \url{https://arxiv.org/pdf/2410.20911}
-	
+
+\bibitem[arXiv'26]{blacksea}
+	\textbf{Dario Pasquini},  Michal Bazyli, Taras Fedynyshyn, Artem Sorokin. \textit{Red-Teaming the Agentic Red-Team.} \url{https://arxiv.org/pdf/2606.24496}
+
 	
 
  \end{thebibliography}
@@ -296,35 +324,37 @@ Program of Study: \textit{Network and Security}
 
 \begin{thebibliography}{99}
 
+
 %\subsection{Lead as P.I.:}
 
 \bibitem[USENIX'26]{aioops}
-	\textbf{Dario Pasquini},  Evgenios M. Kornaropoulos, Giuseppe Ateniese, Omer Akgul, Athanasios Theocharis and Petros Efstathopoulos. \textit{When AIOps Become "AI Oops": Subverting LLM-driven IT Operations via Telemetry Manipulation} 35th USENIX Security Symposium (USENIX Sec'26), August 2026, Baltimore, MD, USA \url{https://arxiv.org/abs/2508.06394}
+	\textbf{Dario Pasquini},  Evgenios M. Kornaropoulos, Giuseppe Ateniese, Omer Akgul, Athanasios Theocharis, Petros Efstathopoulos. \textit{When AIOps Become ``AI Oops'': Subverting LLM-driven IT Operations via Telemetry Manipulation.} 35th USENIX Security Symposium (USENIX Sec'26), August 2026, Baltimore, MD, USA. \textcolor{orange}{(Finalist in the ``Best AI Attack'' category, Pwnie Awards 2026)} \url{https://arxiv.org/abs/2508.06394}
+	
 
 \bibitem[USENIX'25]{llmmap}
-	\textbf{Dario Pasquini},  Evgenios M. Kornaropoulos, Giuseppe Ateniese. \textit{LLMmap: Fingerprinting For Large Language Models}. 34th USENIX Security Symposium (USENIX Sec'25), August 2025, Seattle, WA, USA \url{https://arxiv.org/pdf/2407.15847}
+	\textbf{Dario Pasquini},  Evgenios M. Kornaropoulos, Giuseppe Ateniese. \textit{LLMmap: Fingerprinting for Large Language Models.} 34th USENIX Security Symposium (USENIX Sec'25), August 2025, Seattle, WA, USA. \textcolor{orange}{(Finalist in the ``Best AI Attack'' category, Pwnie Awards 2026)} \url{https://arxiv.org/pdf/2407.15847}
 
 \bibitem[S\&P'24b]{MIGP} 
 \textbf{Dario Pasquini}, Danilo Francati, Giuseppe Ateniese, Evgenios M. Kornaropoulos.
 \textit{Breach Extraction Attacks: Exposing and Addressing the Leakage in Second Generation Compromised Credential Checking Services.}
-45th IEEE Symposium on Security and Privacy (S\&P'24), San Francisco, CA, USA, May 2024. \textcolor{orange}{(Finalist for the Best Crypto Attack at PwnieAwards 2024)} \url{https://eprint.iacr.org/2023/1848.pdf}. \itascore{A++}
+45th IEEE Symposium on Security and Privacy (S\&P'24), San Francisco, CA, USA, May 2024. \textcolor{orange}{(Finalist in the ``Best Crypto Attack'' category, Pwnie Awards 2024)} \url{https://eprint.iacr.org/2023/1848.pdf}. \itascore{A++}
 
 \bibitem[S\&P'24a]{uncm} 
-\textbf{Dario Pasquini}, Giuseppe Ateniese,  Carmela Troncoso. \textit{Universal Neural-Cracking-Machines: Self-Configurable Password Models from Auxiliary Data.} 45th IEEE Symposium on Security and Privacy (S\&P '24), San Francisco, CA, USA, May 2024. \url{https://arxiv.org/pdf/2301.07628.pdf}. \itascore{A++}
+\textbf{Dario Pasquini}, Giuseppe Ateniese,  Carmela Troncoso. \textit{Universal Neural-Cracking-Machines: Self-Configurable Password Models from Auxiliary Data.} 45th IEEE Symposium on Security and Privacy (S\&P'24), San Francisco, CA, USA, May 2024. \url{https://arxiv.org/pdf/2301.07628.pdf}. \itascore{A++}
 
 \bibitem[S\&P'23]{dl}
-\textbf{Dario Pasquini}, Mathilde Raynal, Carmela Troncoso. \textit{On the (In)security of Peer-to-Peer Decentralized Machine Learning.} 44th IEEE Symposium on Security and Privacy (S\&P'23), San Francisco, CA, USA, May 2023 \url{https://arxiv.org/pdf/2205.08443.pdf}. \itascore{A++}
+\textbf{Dario Pasquini}, Mathilde Raynal, Carmela Troncoso. \textit{On the (In)security of Peer-to-Peer Decentralized Machine Learning.} 44th IEEE Symposium on Security and Privacy (S\&P'23), San Francisco, CA, USA, May 2023. \url{https://arxiv.org/pdf/2205.08443.pdf}. \itascore{A++}
 
 \bibitem[CCS'22]{CCS22}
 \textbf{Dario Pasquini}, Danilo Francati, Giuseppe Ateniese. \textit{Eluding Secure Aggregation in Federated Learning via Model Inconsistency.} ACM Conference on Computer and Communications Security (CCS'22), Los Angeles, CA, USA, November 2022. \url{https://arxiv.org/pdf/2111.07380.pdf}. \itascore{A++}
 
 \bibitem[CCS'21]{CCS21}
-\textbf{Dario Pasquini}, Giuseppe Ateniese, Massimo Bernaschi. \textit{Unleashing the Tiger: Inference Attacks on Split Learning.} ACM Conference on Computer and Communications Security (CCS'21),  Seul, Republic of Korea, November 2021. \url{https://arxiv.org/pdf/2012.02670.pdf}. \itascore{A++}
+\textbf{Dario Pasquini}, Giuseppe Ateniese, Massimo Bernaschi. \textit{Unleashing the Tiger: Inference Attacks on Split Learning.} ACM Conference on Computer and Communications Security (CCS'21), Seoul, Republic of Korea, November 2021. \url{https://arxiv.org/pdf/2012.02670.pdf}. \itascore{A++}
 
 \bibitem[USENIX'21]{adam}
 \textbf{Dario Pasquini}, Marco Cianfriglia, Giuseppe Ateniese, Massimo Bernaschi. \textit{Reducing Bias in Modeling Real-world Password Strength via Deep Learning and Dynamic Dictionaries.} 30th USENIX Security Symposium (USENIX Sec'21), August 2021. \url{https://arxiv.org/pdf/2010.12269.pdf}. \itascore{A++}
 	
-\bibitem[S\&P'21]{SP21} \textbf{Dario Pasquini}, Ankit Gangwal, Giuseppe Ateniese, Massimo Bernaschi, Mauro Conti. \textit{Improving Password Guessing via Representation Learning.}  42th IEEE Symposium on Security and Privacy (S\&P'21), San Francisco, CA, USA, May 2021. \url{https://arxiv.org/pdf/1910.04232.pdf}. \itascore{A++}
+\bibitem[S\&P'21]{SP21} \textbf{Dario Pasquini}, Ankit Gangwal, Giuseppe Ateniese, Massimo Bernaschi, Mauro Conti. \textit{Improving Password Guessing via Representation Learning.} 42nd IEEE Symposium on Security and Privacy (S\&P'21), San Francisco, CA, USA, May 2021. \url{https://arxiv.org/pdf/1910.04232.pdf}. \itascore{A++}
 
 \end{thebibliography}
 
@@ -341,12 +371,16 @@ Program of Study: \textit{Network and Security}
 \begin{thebibliography}{99}
 \setcounter{enumiv}{7} 
 
+\bibitem[AISec'26]{hackai}
+	\textbf{Dario Pasquini},  Evgenios M. Kornaropoulos, Giuseppe Ateniese. \textit{Hacking Back the AI-Hacker: Prompt Injection as a Defense Against LLM-driven Cyberattacks.} 19th ACM Workshop on Artificial Intelligence and Security (AISec'26). \textcolor{orange}{(Finalist in the ``Epic Achievement'' category, Pwnie Awards 2025)} \textcolor{orange}{(Spotlight)}  \url{https://arxiv.org/pdf/2410.20911}
+	
+
  \bibitem[AISec'24]{nes}
-	\textbf{Dario Pasquini},  Martin Strohmeier, Carmela Troncoso. \textit{Neural Exec: Learning (and Learning from) Execution Triggers for Prompt Injection Attacks.} 17'Th ACM Workshop On Artificial Intelligence And Security \textcolor{orange}{(Spotlight)} \url{https://arxiv.org/pdf/2403.03792.pdf}.
+	\textbf{Dario Pasquini},  Martin Strohmeier, Carmela Troncoso. \textit{Neural Exec: Learning (and Learning from) Execution Triggers for Prompt Injection Attacks.} 17th ACM Workshop on Artificial Intelligence and Security (AISec'24). \textcolor{orange}{(Spotlight)} \url{https://arxiv.org/pdf/2403.03792.pdf}
 
 	
  \bibitem[S\&Pw'23]{sp23w}
-	Etienne Salimbeni, Nina Mainusch, \textbf{Dario Pasquini}. \textit{Your Email Address Holds the Key: Understanding the Connection Between Email and Password Security with Deep Learning.} 6th Deep Learning Security and Privacy Workshop, May 2023
+	Etienne Salimbeni, Nina Mainusch, \textbf{Dario Pasquini}. \textit{Your Email Address Holds the Key: Understanding the Connection Between Email and Password Security with Deep Learning.} 6th Deep Learning Security and Privacy Workshop, May 2023.
 
  \bibitem[ESORICS'20]{ESORICS20}
 \textbf{Dario Pasquini}, Giuseppe Ateniese, Massimo Bernaschi. \textit{Interpretable probabilistic password strength meters via deep learning.}  25th European Symposium on Research in Computer Security (\mbox{ESORICS}'20), September 2020. \itascore{A+}
